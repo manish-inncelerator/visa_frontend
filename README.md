@@ -1,6 +1,6 @@
-# 🚀 Welcome to Visa Query System  
+# 🚀 Welcome!
 
-This repository contains the **Visa Query System**, designed to help users check visa-related information efficiently.  
+This repository contains the **Visa Frontend**, designed to help users signup and continue to visa-related information efficiently.  
 
 ---
 
