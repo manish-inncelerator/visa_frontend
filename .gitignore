@@ -1,0 +1,9 @@
+*.html
+*.txt
+wa.php
+/vendor/
+views/google-auth.php
+views/google.php
+face.php
+func.php
+search.php

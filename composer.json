@@ -1,0 +1,7 @@
+{
+    "require": {
+        "catfan/medoo": "^2.1",
+        "google/apiclient": "^2.18",
+        "ramsey/uuid": "^4.7"
+    }
+}

@@ -1,0 +1,82 @@
+<?php
+// Define steps as you have
+$steps = [
+    [
+        'step_number' => 1,
+        'title' => 'Dates',
+        'subtitle' => 'Journey Date',
+        'status' => 'completed'
+    ],
+    [
+        'step_number' => 2,
+        'title' => 'Persona',
+        'subtitle' => 'Travelers Profile',
+        'status' => 'active'
+    ],
+    [
+        'step_number' => 3,
+        'title' => 'Photo',
+        'subtitle' => 'Upload photo',
+        'status' => 'pending'
+    ],
+    [
+        'step_number' => 4,
+        'title' => 'Passport',
+        'subtitle' => 'Upload passport',
+        'status' => 'pending'
+    ],
+    [
+        'step_number' => 5,
+        'title' => 'Other Documents',
+        'subtitle' => 'Upload documents',
+        'status' => 'pending'
+    ],
+    [
+        'step_number' => 6,
+        'title' => 'Details',
+        'subtitle' => 'Fill in the form',
+        'status' => 'pending'
+    ],
+    [
+        'step_number' => 7,
+        'title' => 'Checkout',
+        'subtitle' => 'Complete payment',
+        'status' => 'final'
+    ]
+];
+
+?>
+
+<div class="stepper-container mb-3">
+    <div class="stepper-wrapper">
+        <?php foreach ($steps as $index => &$step):
+            // Compare the lowercase title with currentStep to set the status
+            $stepTitleLower = strtolower($step['title']);
+
+            if ($currentStep === 'docs') {
+                $currentStep = 'other documents'; // Ensure it matches the step title
+            }
+
+
+            if ($stepTitleLower === $currentStep) {
+                $step['status'] = 'active'; // Mark current as active
+            } elseif ($index < array_search($currentStep, array_map('strtolower', array_column($steps, 'title')))) {
+                $step['status'] = 'completed'; // Mark previous as completed
+            } else {
+                $step['status'] = 'pending'; // Mark future steps as pending
+            }
+        ?>
+            <div class="step-item">
+                <div class="step-content">
+                    <div class="step-circle fw-bold <?= $step['status'] ?>">
+                        <?= $step['status'] === 'completed' ? '<i class="bi bi-check-circle"></i>' : $step['step_number'] ?>
+                    </div>
+                    <div class="step-text">
+                        <div class="step-title"><?= htmlspecialchars($step['title']) ?></div>
+                        <div class="step-subtitle"><?= htmlspecialchars($step['subtitle']) ?></div>
+                    </div>
+                </div>
+            </div>
+        <?php endforeach; ?>
+    </div>
+</div>
