@@ -7,6 +7,7 @@ $data = json_decode($jsonData, true);
 
 // Get the order_id from the X-Order-Id header
 $order_id = isset($_SERVER['HTTP_X_ORDER_ID']) ? $_SERVER['HTTP_X_ORDER_ID'] : null;
+$person_name = isset($_SERVER['HTTP_X_PERSON_NAME']) ? $_SERVER['HTTP_X_PERSON_NAME'] : null;
 
 if (!$order_id) {
     http_response_code(400);
@@ -16,6 +17,32 @@ if (!$order_id) {
 
 // Sanitize input data
 $data = sanitizeData($data);
+
+
+$uuid = $_SESSION['uuid'] ?? null;
+
+// Fetch HU from headers
+$headers = getallheaders();
+$hu = $headers['HU'] ?? $headers['Hu'] ?? $headers['hu'] ?? null;
+
+
+
+$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+$host = parse_url($scheme . '://' . ($_SERVER['HTTP_HOST'] ?? ''), PHP_URL_HOST);
+
+if (defined('DEV_MODE') && DEV_MODE) {
+    echo json_encode(["debug" => ["uuid" => $uuid, "hu" => $hu, "host" => $host]]);
+}
+
+if (!isValidRequest($uuid, $hu, $host)) {
+    respondWithJson(["error" => "Invalid request", "debug" => getErrorDetails($uuid, $hu, $host)], 400);
+}
+
+if (!isHuValid($uuid, $hu)) {
+    respondWithJson(["error" => "Invalid HU"], 401);
+}
+
+
 
 try {
     // Handle all data processing in one go
@@ -28,6 +55,53 @@ try {
     handleAdditionalInformation($database, $data, $order_id);
     handleAntecedentInformation($database, $data, $order_id);
     handleDeclarations($database, $data, $order_id);
+
+    // Fetch traveler data from DB
+    $users = $database->select("travelers", ["name", "is_full_details_available"], [
+        "order_id" => $order_id,
+        "name" => $data['fullName'],
+    ]);
+
+    // Check if any user has incomplete details and process the first one
+    $foundIncomplete = false;
+    foreach ($users as $user) {
+        if ($user['is_full_details_available'] === 0) {
+            // Mark this user as having full details
+            $database->update("travelers", ["is_full_details_available" => 1], [
+                "order_id" => $order_id,
+                "name" => $data['fullName']
+            ]);
+
+            // Get the next traveler who has incomplete details
+            $nextUser = $database->get("travelers", ["name"], [
+                "order_id" => $order_id,
+                "is_full_details_available" => 0
+            ]);
+
+            if ($nextUser) {
+                // Redirect to the next traveler
+                http_response_code(302);
+                header('Location: details?order_id=' . $order_id . '&name=' . $nextUser['name']);
+                exit;
+            } else {
+                // No more incomplete travelers, redirect to the thank you page
+                http_response_code(302);
+                header('Location: thank-you');
+                exit;
+            }
+
+            $foundIncomplete = true;
+            break; // Break the loop once an incomplete user is found and processed
+        }
+    }
+
+    if (!$foundIncomplete) {
+        // No incomplete travelers found, proceed to the thank-you page
+        http_response_code(302);
+        header('Location: thank-you');
+        exit;
+    }
+
 
     // Return unified response
     echo json_encode(['status' => 204, 'message' => 'make_payment']);

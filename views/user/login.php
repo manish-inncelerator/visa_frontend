@@ -77,7 +77,7 @@ echo html_head('Log in', null, true, ['assets/css/signup.css'], true);
                     <span class="px-2 bg-white text-muted fw-bold">OR</span>
                 </div>
 
-                <p class="card-text">New here?
+                <p class="card-text fw-bold">New here?
                     <?php if (isset($_GET['o']) && !empty(trim(strip_tags(stripslashes($_GET['o']))))) : ?>
                         <a href="auth/signup?o=<?= trim(strip_tags(stripslashes($_GET['o']))) ?>">Sign up</a>
                     <?php else : ?>

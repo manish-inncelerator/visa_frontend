@@ -1,7 +1,3 @@
-<?php
-// Save traveller information in details_checklist table
-$ph
-?>
 <div class="card mx-auto my-2">
     <div class="card-header fw-bold text-muted d-flex justify-content-between align-items-center">
         <div>

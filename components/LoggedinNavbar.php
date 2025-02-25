@@ -34,10 +34,10 @@ $pages = $database->select('pages', '*', [
                     <li><a class="dropdown-item" href="logout">Logout</a></li>
                 </ul>
             </div>
-            <a href="auth/register" class="btn btn-blue rounded-3 me-2" type="submit" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem;">
+            <a target="_blank" href="https://api.whatsapp.com/send/?phone=6594314389&text=Hi!%20I%20am%20interested%20in%20visa%20processing&type=phone_number&app_absent=0" class="btn btn-blue rounded-pill me-2" type="submit" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem;">
                 <i class="bi bi-whatsapp" style="margin-right: 8px;"></i> Chat
             </a>
-            <a href="applications" class="btn btn-golden rounded-3 me-2" type="submit" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem;">
+            <a href="applications" class="btn btn-golden rounded-pill me-2" type="submit" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem;">
                 <i class="bi bi-file-earmark" style="margin-right: 8px;"></i> My Applications
             </a>
         </div>
@@ -89,7 +89,7 @@ $pages = $database->select('pages', '*', [
                     <?php endforeach; ?>
                 </ul>
                 <div class="d-flex flex-column mt-auto">
-                    <a href="auth/register" class="btn btn-blue me-2 mb-2" type="submit" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem;">
+                    <a target="_blank" href="https://api.whatsapp.com/send/?phone=6594314389&text=Hi!%20I%20am%20interested%20in%20visa%20processing&type=phone_number&app_absent=0" class="btn btn-blue me-2 mb-2" type="submit" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem;">
                         <i class="bi bi-whatsapp" style="margin-right: 8px;"></i> Chat
                     </a><a href="auth/register" class="btn btn-info me-2 mb-2" type="submit" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem;">
                         <i class="bi bi-file-earmark" style="margin-right: 8px;"></i> My Applications

@@ -13,6 +13,20 @@ $photoMap = [];
 foreach ($photos as $photo) {
     $photoMap[$photo['traveler_id']] = $photo['photo_filename']; // Adjust column name as per your DB structure
 }
+foreach ($people as $person) {
+    // Step 1: Check if the record exists based on order_id
+    $result = $database->select("details_checklist", "*", ["order_id" => $order_id]);
+
+    // Step 2: If no record is found, insert a new record
+    if (count($result) == 0) {
+        // Assuming you have an $id variable (perhaps from another part of your code)
+        $database->insert("details_checklist", [
+            "order_id" => $order_id,
+            "traveler_id" => $person['id'],  // Ensure you have this value available
+            "is_finished" => 0  // Set is_finished to 0
+        ]);
+    }
+}
 ?>
 <div class="card mx-auto mb-2">
     <div class="card-header fw-bold text-muted d-flex justify-content-between align-items-center">

@@ -9,6 +9,8 @@ defined('BASE_DIR') || die('Direct access denied');
 
 // Sanitize and retrieve the search query
 $searchQuery = isset($_GET['q']) ? trim(strip_tags(stripslashes($_GET['q']))) : '';
+$searchQuery = str_replace('.', '', $searchQuery);  // Remove the dot
+
 
 if (!$searchQuery) {
     die(json_encode(['status' => 'error', 'message' => 'No country specified']));
@@ -294,7 +296,7 @@ $searchQueryLower = strtolower($searchQuery);
 $resolvedQuery = $countryAliases[$searchQueryLower] ?? $searchQuery;
 
 // Escape special characters for SQL wildcard searches
-$escapedQuery = str_replace(['%', '_', '*', '?', '[', ']'], ['\%', '\_', '\*', '\?', '\[', '\]'], $resolvedQuery);
+$escapedQuery = str_replace(['%', '_', '*', '?', '.', '[', ']'], ['\%', '\_', '\*', '\?', '', '\[', '\]'], $resolvedQuery);
 
 // Fetch countries from the database
 $countries = !empty($escapedQuery)
@@ -365,7 +367,14 @@ $secureHash = md5($hashInput);
                 <div class="my-3 border border-bottom"></div>
                 <?php require('components/VisaCard.php'); ?>
             <?php else: ?>
-                <p class="alert alert-danger"><i class="bi bi-exclamation-circle"></i> No results found for <?= ucfirst($pageTitle); ?></p>
+                <div class="card text-bg-warning mb-3">
+                    <div class="card-header">
+                        <i class="bi bi-exclamation-circle"></i> No results found
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title">Searched for: <?= htmlspecialchars(ucfirst($pageTitle)); ?></h5>
+                    </div>
+                </div>
                 <?php if (!empty($matched_country['name'])): ?>
                     <div class="card">
                         <div class="card-body">

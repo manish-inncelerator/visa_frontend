@@ -68,8 +68,7 @@ $routes = [
     ['path' => '/auth/login', 'methods' => ['GET'], 'view' => 'user/login'],
     ['path' => '/profile', 'methods' => ['GET'], 'view' => 'user/profile'],
     ['path' => '/country/{country}', 'methods' => ['GET'], 'view' => 'apply-visa', 'constraints' => ['country' => '[a-z0-9-]+']],
-    ['path' => '/search_query', 'methods' => ['GET'], 'view' => 'search_query'],
-    ['path' => '/search', 'methods' => ['GET'], 'view' => 'search'],
+    ['path' => '/search', 'methods' => ['GET'], 'view' => 'search_query'],
     ['path' => '/blog/post/{slug}', 'methods' => ['GET'], 'view' => 'blog/post', 'constraints' => ['slug' => '[a-z0-9-]+']],
     ['path' => '/pages/{slug}', 'methods' => ['GET'], 'view' => 'pages/page', 'constraints' => ['slug' => '[a-z0-9-]+']],
     [

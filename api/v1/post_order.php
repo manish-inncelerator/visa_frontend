@@ -16,6 +16,8 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 // Retrieve and sanitize POST data
 $traveller_count = isset($_POST['traveller_count']) ? intval($_POST['traveller_count']) : 1;
 $country_id = isset($_POST['country_id']) ? intval($_POST['country_id']) : 1;
+$date_of_journey = isset($_POST['date_of_journey']) ? $_POST['date_of_journey'] : null;
+$date_of_arrival = isset($_POST['date_of_arrival']) ? $_POST['date_of_arrival'] : null;
 
 // Fetch details from the database
 $fees = $database->get(
@@ -48,6 +50,8 @@ $insert_status = $database->insert('orders', [
     'order_id' => $order_id,
     'no_of_pax' => $traveller_count,
     'order_total' => $total_amount,
+    'journey_date_departure' => $date_of_journey,
+    'journey_date_arrival' => $date_of_arrival,
     'order_date' => date('Y-m-d H:i:s'),
     'is_ordered' => 1
 ]);

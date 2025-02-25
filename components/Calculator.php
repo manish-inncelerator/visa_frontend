@@ -108,7 +108,7 @@
                 Start Application <i class="bi bi-arrow-right-circle fs-4 ms-1"></i>
             </button>
 
-            <div class="divider">
+            <!-- <div class="divider">
                 <span class="px-2 bg-white text-muted fw-bold">OR</span>
             </div>
 
@@ -119,7 +119,7 @@
                     <p class="mt-2 mb-0 h6">Visa in 20 days</p>
                 </div>
                 <span class="fw-bold fs-3 alterFont text-golden-light">S$699</span>
-            </a>
+            </a> -->
 
         </div>
     </div>

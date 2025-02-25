@@ -429,7 +429,7 @@ if ($currentStep === 'photo') {
                 iso: "CY"
             },
             "Czech": {
-                country: "Czech Republic",
+                country: "Czechia",
                 iso: "CZ"
             },
             "Danish": {
@@ -813,7 +813,7 @@ if ($currentStep === 'photo') {
                 iso: "TN"
             },
             "Turkish": {
-                country: "Turkey",
+                country: "Türkiye",
                 iso: "TR"
             },
             "Ugandan": {
@@ -1027,6 +1027,107 @@ if ($currentStep === 'photo') {
             "Vatican": {
                 "country": "Vatican City",
                 "iso": "VA"
+            },
+            // Missing UN member states and territories
+            "Bruneian": {
+                "country": "Brunei Darussalam",
+                "iso": "BN"
+            },
+            "Timorese": {
+                "country": "Timor-Leste",
+                "iso": "TL"
+            },
+            "British Virgin Islander": {
+                "country": "British Virgin Islands",
+                "iso": "VG"
+            },
+            "Ålandic": {
+                "country": "Åland Islands",
+                "iso": "AX"
+            },
+            // Alternative demonyms and spellings
+            "Motswana": { // Singular of Batswana
+                "country": "Botswana",
+                "iso": "BW"
+            },
+            "Mosotho": { // Singular of Basotho
+                "country": "Lesotho",
+                "iso": "LS"
+            },
+            "Acehnese": {
+                "country": "Indonesia",
+                "iso": "ID"
+            },
+            "Lao": { // Alternative to "Laotian"
+                "country": "Laos",
+                "iso": "LA"
+            },
+            // French territories missing
+            "Saint Pierrais": {
+                "country": "Saint Pierre and Miquelon",
+                "iso": "PM"
+            },
+            "French Southern Territories": {
+                "country": "French Southern and Antarctic Lands",
+                "iso": "TF"
+            },
+            // Additional territories
+            "US Minor Outlying Islands": {
+                "country": "United States Minor Outlying Islands",
+                "iso": "UM"
+            },
+            "Antarctic": {
+                "country": "Antarctica",
+                "iso": "AQ"
+            },
+            // Alternative names for existing countries
+            "Persian": {
+                "country": "Iran",
+                "iso": "IR"
+            },
+            "Myanmarese": { // Alternative to "Burmese"
+                "country": "Myanmar",
+                "iso": "MM"
+            },
+            "Khmer": { // Alternative to "Cambodian"
+                "country": "Cambodia",
+                "iso": "KH"
+            },
+            // Missing small states and dependencies
+            "Bouvet Islander": {
+                "country": "Bouvet Island",
+                "iso": "BV"
+            },
+            "South Ossetian": {
+                "country": "South Ossetia",
+                "iso": "GE" // Disputed territory, using Georgia's code
+            },
+            "Abkhazian": {
+                "country": "Abkhazia",
+                "iso": "GE" // Disputed territory, using Georgia's code
+            },
+            "Transnistrian": {
+                "country": "Transnistria",
+                "iso": "MD" // Disputed territory, using Moldova's code
+            },
+            // Corrections to existing entries
+            "Maldivian": {
+                "country": "Maldives",
+                "iso": "MV"
+            },
+            "Bruneian": {
+                "country": "Brunei",
+                "iso": "BN"
+            },
+            // Additional British territories
+            "Gibraltar": {
+                "country": "Gibraltar",
+                "iso": "GI"
+            },
+            // Updates for recent name changes
+            "Eswatini": { // Former Swaziland
+                "country": "Eswatini",
+                "iso": "SZ"
             }
         };
 
@@ -1102,47 +1203,49 @@ if ($currentStep === 'photo') {
             const passportCountryCode = travelerData?.passport_issuing_country || '';
 
             travelerDiv.innerHTML = `
-        <h5 class="fw-bold" id="travelerHeading_${travelerNumber}">Traveler ${travelerNumber}</h5>
-        <div class="mb-3">
-            <label class="form-label">Name <span class="text-muted">(must match your passport)</span></label>
-            <input type="text" class="form-control" name="name_${travelerNumber}" value="${name}" required 
-                oninput="updateTravelerHeading(${travelerNumber}, this.value)">
-            <div class="invalid-feedback">Name is required.</div>
-        </div>
-        <div class="mb-3">
-            <label>Passport Number</label>
-            <input type="text" class="form-control passport-input" name="passport_${travelerNumber}" 
-                value="${passportNumber}" pattern="^(?!^0+$)[A-Z0-9]{5,15}$" required>
-            <div class="invalid-feedback">Passport number is required or invalid.</div>
-            <div class="valid-feedback">Looks good!</div>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Date of Birth</label>
-            <input type="date" class="form-control" name="dob_${travelerNumber}" value="${dob}" required>
-            <div class="invalid-feedback">Date of birth is required.</div>
-        </div>
-        <div class="mb-3">
-            <label class="form-label">Nationality</label>
-            <select class="form-select" name="nationality_${travelerNumber}" id="nationality_${travelerNumber}" required onchange="matchNationalityWithPassport(${travelerNumber})">
-                <option value="" selected disabled>Please choose</option>
-                ${nationalityOptions}
-            </select>
-            <div class="invalid-feedback">Please select a nationality.</div>
-        </div>
-        <div class="mb-2" id="passportCountrydiv_${travelerNumber}">
-            <label class="form-label">Passport Issuing Country</label>
-            <select class="form-select" name="passport_country_${travelerNumber}" 
-                    id="passportCountry_${travelerNumber}" required 
-                    onchange="setHiddenField(this, ${travelerNumber})">
-                <option value="">Choose a country</option>
-                ${passportCountryOptions}
-            </select>
-            <input type="hidden" id="passportCountryCode_${travelerNumber}" name="passport_country_code_${travelerNumber}" value="${passportCountryCode}">
-            <div class="invalid-feedback">Passport issuing country is required.</div>
-        </div> 
-        <input type="hidden" name="order_id" value="${travelerData?.order_id || '<?= $order_id; ?>' }">
-        <input type="hidden" name="action" value="${travelerData?.order_id ? 'update' : 'create'}">            
-        `;
+                <h5 class="fw-bold" id="travelerHeading_${travelerNumber}">
+                    Traveler ${travelerNumber}${name ? `: ${name}` : ''}
+                </h5>
+                <div class="mb-3">
+                    <label class="form-label">Name <span class="text-muted">(must match your passport)</span></label>
+                    <input type="text" class="form-control" name="name_${travelerNumber}" value="${name}" required 
+                        oninput="updateTravelerHeading(${travelerNumber}, this.value)">
+                    <div class="invalid-feedback">Name is required.</div>
+                </div>
+                <div class="mb-3">
+                    <label>Passport Number</label>
+                    <input type="text" class="form-control passport-input" name="passport_${travelerNumber}" 
+                        value="${passportNumber}" pattern="^(?!^0+$)[A-Z0-9]{5,15}$" required>
+                    <div class="invalid-feedback">Passport number is required or invalid.</div>
+                    <div class="valid-feedback">Looks good!</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Date of Birth</label>
+                    <input type="date" class="form-control" name="dob_${travelerNumber}" value="${dob}" required>
+                    <div class="invalid-feedback">Date of birth is required.</div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">Nationality</label>
+                    <select class="form-select" name="nationality_${travelerNumber}" id="nationality_${travelerNumber}" required onchange="matchNationalityWithPassport(${travelerNumber})">
+                        <option value="" selected disabled>Please choose</option>
+                        ${nationalityOptions}
+                    </select>
+                    <div class="invalid-feedback">Please select a nationality.</div>
+                </div>
+                <div class="mb-2" id="passportCountrydiv_${travelerNumber}">
+                    <label class="form-label">Passport Issuing Country</label>
+                    <select class="form-select" name="passport_country_${travelerNumber}" 
+                            id="passportCountry_${travelerNumber}" required 
+                            onchange="setHiddenField(this, ${travelerNumber})">
+                        <option value="">Choose a country</option>
+                        ${passportCountryOptions}
+                    </select>
+                    <input type="hidden" id="passportCountryCode_${travelerNumber}" name="passport_country_code_${travelerNumber}" value="${passportCountryCode}">
+                    <div class="invalid-feedback">Passport issuing country is required.</div>
+                </div> 
+                <input type="hidden" name="order_id" value="${travelerData?.order_id || '<?= $order_id; ?>' }">
+                <input type="hidden" name="action" value="${travelerData?.order_id ? 'update' : 'create'}">            
+                `;
 
             container.appendChild(travelerDiv);
             travelerDiv.style.cssText = "border-bottom: 1px dashed #ccc; margin: 10px 0; padding-bottom: 10px;";

@@ -74,7 +74,7 @@ try {
                     </div>
 
                     <div class="text-end">
-                        <div class="processing-time mb-1 alterFont small" style="color: var(--blue-light);">Get Visa in</div>
+                        <div class="processing-time mb-1 alterFont small" style="color: var(--blue-light);">Processing Timeline</div>
                         <div class="days-display alterFont fw-bold" style="color: var(--blue-dark);"><?= $destination['processing_time_value']; ?> <?= $destination['processing_time_unit']; ?></div>
                     </div>
                 </div>

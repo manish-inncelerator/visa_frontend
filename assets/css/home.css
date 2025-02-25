@@ -1,9 +1,23 @@
+html {
+  scroll-behavior: smooth;
+}
+
 .hero-section {
-  background-image: url("../images/cover_image.jpg");
-  background-size: cover;
-  background-position: center center;
-  background-repeat: no-repeat;
-  position: relative;
+  position: relative; /* Needed for absolute positioning of ::before */
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 1) 0%,
+    /* White at the top */ rgba(255, 255, 255, 0.8) 10%,
+    #6699b3 30%,
+    #3a6e8f 50%,
+    /* Deep blue in the middle */ #6699b3 70%,
+    rgba(255, 255, 255, 0.8) 90%,
+    rgba(255, 255, 255, 1) 100% /* White at the bottom */
+  );
+  min-height: 100vh; /* Full viewport height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .hero-section::before {
@@ -13,12 +27,21 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.8); /* Blackish overlay with 50% opacity */
+  background: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.8) 0%,
+    /* Soft fade at the top */ rgba(255, 255, 255, 0) 20%,
+    /* Transparent */ rgba(255, 255, 255, 0) 80%,
+    /* Transparent */ rgba(255, 255, 255, 0.8) 100%
+      /* Soft fade at the bottom */
+  );
+  z-index: 0;
 }
 
 .hero-section .container {
   position: relative;
-  z-index: 1; /* Ensure text is above the overlay */
+  z-index: 1; /* Ensures content is above the overlay */
+  margin-top: -110px; /* Moves the content upward */
 }
 
 /*search*/
@@ -269,7 +292,7 @@
 
 /* Search Button */
 .custom-btn-search {
-  background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+  background: var(--golden);
   border: none;
   border-radius: 50px;
   padding: 10px 20px;
@@ -286,9 +309,9 @@
 }
 
 .custom-btn-search:hover {
-  background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+  background: var(--golden-dark);
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 4px 8px var(--golden-dark);
 }
 
 .custom-btn-search i {
@@ -297,7 +320,7 @@
 
 /* Voice Search Button (Pure Circle) */
 .custom-btn-voice {
-  background: linear-gradient(135deg, #a855f7 0%, #9333ea 100%);
+  background: var(--blue);
   border: none;
   width: 48px;
   height: 48px;
@@ -311,9 +334,9 @@
 }
 
 .custom-btn-voice:hover {
-  background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+  background: var(--blue-dark);
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
+  box-shadow: 0 5px 15px var(--blue-dark);
 }
 
 .custom-btn-voice i {
@@ -347,5 +370,260 @@
   .custom-btn-voice {
     width: 38px;
     height: 38px;
+  }
+}
+/* visa card */
+.visa-section {
+  padding: 60px 0;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.section-title {
+  margin-bottom: 50px;
+  position: relative;
+}
+
+.section-title:after {
+  content: "";
+  display: block;
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--golden-dark), var(--golden-light));
+  margin: 15px auto 0;
+  border-radius: 2px;
+}
+
+.subtitle {
+  color: #6c757d;
+  font-weight: 400;
+}
+
+.step-card {
+  height: 100%;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(153, 101, 21, 0.15);
+  transition: all 0.5s ease;
+  border: none;
+  position: relative;
+  transform-style: preserve-3d;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+}
+
+.step-card:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(245, 215, 110, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: all 0.75s ease;
+  z-index: 2;
+}
+
+.step-card:hover:before {
+  left: 125%;
+}
+
+.step-card:hover {
+  transform: rotateY(5deg) translateY(-15px);
+  box-shadow: -20px 20px 30px rgba(153, 101, 21, 0.2);
+}
+
+.step-card .card-body {
+  padding: 30px 20px;
+  z-index: 1;
+  position: relative;
+}
+
+.step-number {
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(
+    135deg,
+    var(--golden) 0%,
+    var(--golden-light) 100%
+  );
+  color: white;
+  border-radius: 50%;
+  line-height: 50px;
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.3);
+}
+
+.step-title {
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 15px;
+  color: var(--golden-dark);
+}
+
+.step-description {
+  color: #6c757d;
+  font-size: 16px;
+}
+
+.step-icon {
+  width: 120px;
+  height: 120px;
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0.1) 0%,
+    rgba(245, 215, 110, 0.1) 100%
+  );
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  transition: all 0.3s ease;
+  box-shadow: inset 0 0 20px rgba(255, 255, 255, 0.5),
+    0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.step-card:hover .step-icon {
+  transform: scale(1.05) translateZ(20px);
+  background: linear-gradient(
+    135deg,
+    rgba(212, 175, 55, 0.15) 0%,
+    rgba(245, 215, 110, 0.15) 100%
+  );
+}
+
+.step-icon i {
+  font-size: 50px;
+  background: linear-gradient(
+    135deg,
+    var(--golden-dark) 0%,
+    var(--golden) 100%
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+}
+
+.feature-list {
+  text-align: left;
+  margin-top: 15px;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+.feature-list li {
+  padding: 5px 0;
+  position: relative;
+  padding-left: 25px;
+}
+
+.feature-list li:before {
+  content: "\F633";
+  font-family: "bootstrap-icons";
+  position: absolute;
+  left: 0;
+  color: var(--golden);
+}
+
+.cta-container {
+  margin-top: 50px;
+}
+
+.cta-button {
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  background: linear-gradient(
+    135deg,
+    var(--golden-dark) 0%,
+    var(--golden) 100%
+  );
+  border: none;
+  box-shadow: 0 5px 15px rgba(153, 101, 21, 0.3);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.cta-button:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    to right,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(255, 255, 255, 0.3) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  transform: skewX(-25deg);
+  transition: all 0.75s ease;
+}
+
+.cta-button:hover:before {
+  left: 125%;
+}
+
+.cta-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(212, 175, 55, 0.4);
+}
+
+.card-glass-effect {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-radius: 15px;
+  pointer-events: none;
+}
+
+.card-shine {
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  background: radial-gradient(
+    circle at center,
+    rgba(245, 215, 110, 0.8) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  transform: scale(0.5);
+  pointer-events: none;
+}
+
+.step-card:hover .card-shine {
+  opacity: 0.2;
+  transform: scale(1);
+}
+
+.golden-text {
+  color: var(--golden-dark);
+}
+
+@media (max-width: 767px) {
+  .step-card {
+    margin-bottom: 30px;
   }
 }

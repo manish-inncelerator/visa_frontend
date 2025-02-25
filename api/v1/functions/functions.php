@@ -11,7 +11,7 @@ function isValidRequest($uuid, $hu, $host): bool
     return in_array($_SERVER['REQUEST_METHOD'], $allowedMethods) &&
         !empty($uuid) &&
         !empty($hu) &&
-        in_array(strtolower($host), ['localhost', 'fayyaztravels.com', 'www.fayyaztravels.com', 'availability-chelsea-martin-costa.trycloudflare.com']);
+        in_array(strtolower($host), ['localhost', 'fayyaztravels.com', 'www.fayyaztravels.com']);
 }
 
 function getErrorDetails($uuid, $hu, $host): array

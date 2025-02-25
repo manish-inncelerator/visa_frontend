@@ -90,7 +90,7 @@ echo html_head('Sign Up', null, true, ['assets/css/signup.css'], true);
                     <span class="px-2 bg-white text-muted fw-bold">OR</span>
                 </div>
 
-                <p class="card-text">Already signed up? <a href="auth/login">Log in</a></p>
+                <p class="card-text fw-bold">Already signed up? <a href="auth/login">Log in</a></p>
             </div>
         </div>
     </div>

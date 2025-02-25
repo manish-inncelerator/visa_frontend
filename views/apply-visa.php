@@ -34,7 +34,7 @@ require 'min.php';
 require 'imgClass.php';
 
 // Output HTML head and scripts
-echo html_head($country_name . ' Visa Online &mdash; Fees, Requirements & Application Process', null, true, ['assets/css/visa.css']);
+echo html_head($country_name . ' Visa Online &mdash; Fees, Requirements & Application Process', null, true, ['assets/css/visa.css'], true);
 
 /**
  * Fetch country details and images by country name.
@@ -110,7 +110,7 @@ $countryData = fetchCountryDetails($country_name);
 
 // Redirect to 404 if country not found
 if (empty($countryData)) {
-    header("Location: /404.php");
+    header("Location: ../404");
     exit;
 }
 ?>
@@ -126,10 +126,6 @@ if (isset($_SESSION['user_id'])) {
 }
 ?>
 <!-- ./Navbar -->
-
-<!-- Hero Section -->
-
-<!-- Hero Section -->
 
 <!-- country details -->
 <section class="container mt-2">
@@ -231,7 +227,8 @@ if (isset($_SESSION['user_id'])) {
                 </div>
             </section>
             <h1><b><?= $country_name; ?> Visa</b></h1>
-            <p class="text-muted"><i class="bi bi-star-fill"></i> 0 | <i class="bi bi-chat-square-heart-fill me-2"></i> <a href="" class="text-golden">0 Reviews</a> | <span class="badge bg-success"><i class="bi bi-patch-check-fill"></i> <?= $visaDetail['approval_rate']; ?>% Approval Rate</span> | <span class="badge bg-danger"><i class="bi bi-arrow-up-right-circle-fill"></i> Trending</span></p>
+            <!-- <p class="text-muted"><i class="bi bi-star-fill"></i> 0 | <i class="bi bi-chat-square-heart-fill me-2"></i> <a href="" class="text-golden">0 Reviews</a> | <span class="badge bg-success"><i class="bi bi-patch-check-fill"></i> </?= $visaDetail['approval_rate']; ?>% Approval Rate</span> | <span class="badge bg-danger"><i class="bi bi-arrow-up-right-circle-fill"></i> Trending</span></p> -->
+            <p class="text-muted"><span class="badge bg-success"><i class="bi bi-patch-check-fill"></i> <?= $visaDetail['approval_rate']; ?>% Approval Rate</span> | <span class="badge bg-danger"><i class="bi bi-arrow-up-right-circle-fill"></i> Trending</span></p>
         </div>
     </div>
 </section>
@@ -343,8 +340,8 @@ if (isset($_SESSION['user_id'])) {
             </div>
             <!-- ./visa grid details -->
 
-            <h2 class="heading-underline fw-bold mt-3">Visa Processing Time</h2>
-            <p>The visa processing time for <?= $country_name; ?> is <?= $visaDetail['processing_time_value']; ?> <?= $visaDetail['processing_time_unit']; ?>.</p>
+            <h2 class="heading-underline fw-bold mt-3">Visa Processing Timeline</h2>
+            <p>The visa Processing Timeline for <?= $country_name; ?> is <?= $visaDetail['processing_time_value']; ?> <?= $visaDetail['processing_time_unit']; ?>.</p>
 
 
             <h2 class="heading-underline fw-bold mt-3">Required Documents</h2>
@@ -410,10 +407,10 @@ if (isset($_SESSION['user_id'])) {
                 <p>No FAQs available for this country.</p>
             <?php endif; ?>
 
-            <div>
+            <!--<div>
                 <h2 class="heading-underline fw-bold mt-3">Rate Our Service</h2>
                 <p class="text-muted">Your rating helps others better understand your experience with us.</p>
-                <!-- Star Rating -->
+                //Star Rating
                 <div id="star-container">
                     <i class="bi bi-star stars" data-value="1"></i>
                     <i class="bi bi-star stars" data-value="2"></i>
@@ -421,21 +418,20 @@ if (isset($_SESSION['user_id'])) {
                     <i class="bi bi-star stars" data-value="4"></i>
                     <i class="bi bi-star stars" data-value="5"></i>
                 </div>
-                <!-- Star Rating -->
-                <!-- Ratings -->
+                // Star Rating
                 <div class="card card-rating p-4 mt-3 rounded-3">
-                    <!-- Overall Rating -->
+                    // Overall Rating
                     <div class="d-flex align-items-center">
                         <h2 class="mb-0 display-5 fw-bold">4.0</h2>
                         <i class="bi bi-star-fill text-warning fs-3 ms-2"></i>
                     </div>
                     <p class="text-muted mb-3">67,817 ratings and 13,302 reviews</p>
 
-                    <!-- Rating Breakdown -->
+                    // Rating Breakdown
                     <div id="ratings-container"></div>
                 </div>
-                <!-- Ratings -->
-                <!-- Review Modal -->
+                // Ratings 
+                // Review Modal
                 <div class="modal fade" id="reviewModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -455,21 +451,15 @@ if (isset($_SESSION['user_id'])) {
                                     placeholder="Write your review here..."></textarea>
                             </div>
                             <div class="modal-footer">
-                                <button
-                                    type="button"
-                                    class="btn btn-outline-secondary"
-                                    data-bs-dismiss="modal">
-                                    Cancel
-                                </button>
-                                <button type="button" class="btn btn-primary" id="submitReview">
-                                    Submit
+                                <button type="button" class="btn btn-golden rounded-pill" id="submitReview">
+                                    Submit Review <i class="bi bi-arrow-right-circle ms-1"></i>
                                 </button>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Logout Alert Modal -->
+                // Logout Alert Modal
                 <div class="modal fade" id="logoutModal" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -480,9 +470,21 @@ if (isset($_SESSION['user_id'])) {
                                     class="btn-close"
                                     data-bs-dismiss="modal"></button>
                             </div>
-                            <div class="modal-body text-center">
-                                <p id="thankYouMessageLogout" class="fw-bold text-danger"></p>
-                                <a href="login.php" class="btn btn-primary">Login</a>
+                            <div class="modal-body">
+                                <form id="loginForm" autocomplete="off" novalidate>
+                                    <div class="mb-3">
+                                        <label for="exampleInputEmail1" class="form-label">Email address</label>
+                                        <input type="email" class="form-control" id="exampleInputEmail1" required>
+                                        <div class="invalid-feedback">Please enter a valid email.</div>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="exampleInputPassword1" class="form-label">Password</label>
+                                        <input type="password" class="form-control" id="exampleInputPassword1" required>
+                                        <div class="invalid-feedback">Password is required.</div>
+                                    </div>
+                                    <button type="submit" class="btn btn-golden rounded-pill">Log in <i class="bi bi-arrow-right-circle"></i></button>
+                                    <div id="loginMessage" class="mt-3"></div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -491,7 +493,7 @@ if (isset($_SESSION['user_id'])) {
             <div>
                 <h2 class="heading-underline fw-bold mt-3">Review (0)</h2>
                 <p class="text-muted">Your feedback helps us improve and ensures others receive reliable visa assistance.</p>
-                <!-- Review Form -->
+                // Review Form
                 <form action="">
                     <div class="editor-container">
                         <div class="editor-toolbar">
@@ -511,27 +513,27 @@ if (isset($_SESSION['user_id'])) {
                                 <button type="button" class="btn btn-secondary border-0 bg-gradient" data-bs-toggle="tooltip" data-bs-placement="top" title="Bullet List (Ctrl + M)" onclick="formatText('insertUnorderedList')">
                                     <i class="bi bi-list-ul"></i>
                                 </button>
-                                <!-- Help Button -->
+                                // Help Button
                                 <button type="button" class="btn btn-secondary border-0 bg-gradient" data-bs-toggle="modal" data-bs-target="#shortcutsModal">
                                     <i class="bi bi-question-circle"></i>
                                 </button>
                             </div>
                         </div>
 
-                        <!-- Editable Text Area -->
+                        // Editable Text Area
                         <div contenteditable="true" id="review" class="editor-content"></div>
 
-                        <!-- Hidden input to store the formatted content -->
+                        // Hidden input to store the formatted content
                         <input type="hidden" name="reviewContent" id="reviewContent">
 
-                        <!-- Submit Button -->
+                        // Submit Button
                     </div>
                     <button type="submit" class="btn btn-golden mt-2 rounded-pill" onclick="submitReview()">Post <i class="bi bi-arrow-right-circle"></i></button>
                 </form>
-                <!-- ./Review Form -->
+                // ./Review Form
             </div>
 
-            <!-- Bootstrap Modal for Shortcuts -->
+            // Bootstrap Modal for Shortcuts 
             <div class="modal fade" id="shortcutsModal" tabindex="-1" aria-labelledby="shortcutsModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content">
@@ -552,7 +554,7 @@ if (isset($_SESSION['user_id'])) {
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
 
 
 
@@ -624,7 +626,8 @@ echo html_scripts(
     includeJQuery: true,
     includeBootstrap: true,
     customScripts: ['https://cdn.jsdelivr.net/npm/canvas-confetti'],
-    includeSwal: false
+    includeSwal: false,
+    includeNotiflix: true
 );
 ?>
 <!-- Bootstrap Popover Initialization -->
@@ -729,77 +732,137 @@ echo html_scripts(
 </script>
 
 <script>
-    let selectedRating = 0;
-    let loggedIn = true; // Set dynamically based on user session
-    let ratingLocked = false;
+    // Rating and Review
+    document.addEventListener("DOMContentLoaded", function() {
+        let selectedRating = 0;
+        let loggedIn = false; // Set dynamically based on user session
+        let ratingLocked = false;
 
-    $(document).ready(function() {
-        $(".stars").hover(function() {
-            if (!ratingLocked) {
-                let value = $(this).data("value");
-                highlightStars(value);
+        // Check if the user is logged in and set the loggedIn variable
+        function checkLoginStatus() {
+            const userId = '<?= $_SESSION['user_id'] ?? ''; ?>'; // Get user ID from session
+            loggedIn = userId ? true : false;
+            return userId;
+        }
+
+        // Show the appropriate modal based on login status
+        function showModalBasedOnLogin(userId) {
+            if (!userId) {
+                const logoutModal = document.getElementById("logoutModal");
+                $(logoutModal).modal("show");
+                return false;
             }
-        }, function() {
-            if (!ratingLocked) {
-                highlightStars(0); // Remove hover selection when moving left
-            }
-        });
+            const reviewModal = document.getElementById("reviewModal");
+            $(reviewModal).modal("show");
+            return true;
+        }
 
-        $(".stars").click(function() {
-            if (ratingLocked) return; // Prevent changing rating after selection
-
-            selectedRating = $(this).data("value");
-            highlightStars(selectedRating);
-            lockRating();
-            if (selectedRating >= 4) triggerConfetti();
-
-            let message = selectedRating >= 3 ?
-                "Thank you for rating us!" :
-                "Thanks! We will work to improve our service.";
-
-            $("#thankYouMessage").text(`${message} You rated us ${selectedRating} stars.`);
-            $("#reviewModal").modal("show");
-        });
-
-        $("#submitReview").click(function() {
-            let reviewText = $("#reviewText").val().trim();
-            if (reviewText === "") {
-                alert("Please write a review before submitting.");
-                return;
-            }
-
-            $.post("api/v1/rateAndReview.php", {
-                rating: selectedRating,
-                review: reviewText
-            }, function(response) {
-                alert("Review submitted successfully!");
-                $("#reviewModal").modal("hide");
-            });
-        });
-
+        // Highlight the stars based on the selected rating or hover effect
         function highlightStars(value) {
-            $(".stars").each(function() {
-                let starValue = $(this).data("value");
-                $(this).removeClass("bi-star bi-star-fill selected");
-                $(this).addClass(starValue <= value ? "bi-star-fill selected" : "bi-star");
-            });
-        }
-
-        function lockRating() {
-            ratingLocked = true;
-            $(".stars").off("mouseenter mouseleave"); // Remove hover effects after selection
-            $(".stars").addClass("locked");
-        }
-
-        function triggerConfetti() {
-            confetti({
-                particleCount: 100,
-                spread: 70,
-                origin: {
-                    y: 0.6
+            const stars = document.querySelectorAll(".stars");
+            stars.forEach(star => {
+                let starValue = star.getAttribute("data-value");
+                star.classList.remove("bi-star", "bi-star-fill", "selected");
+                if (starValue <= value) {
+                    star.classList.add("bi-star-fill", "selected");
+                } else {
+                    star.classList.add("bi-star");
                 }
             });
         }
+
+        // Lock the rating to prevent changes after submission
+        function lockRating() {
+            ratingLocked = true;
+            const stars = document.querySelectorAll(".stars");
+            stars.forEach(star => {
+                star.classList.add("locked");
+            });
+        }
+
+        // Submit the rating (and review if available) to the server
+        function submitRating(review = "") {
+            const userId = checkLoginStatus(); // Check if the user is logged in
+            if (!showModalBasedOnLogin(userId)) return; // Show the appropriate modal if not logged in
+
+            // Prepare data to be sent to the API
+            const data = {
+                rating: selectedRating,
+                review: review || '' // If no review, send an empty string
+            };
+
+            // Send the data as JSON to the API
+            fetch("api/v1/rate-and-review", {
+                    method: "POST",
+                    headers: {
+                        "HU": '<?= $hu; ?>',
+                        "X-Country-Id": '<?= $countryData['id']; ?>',
+                        "X-Person-Id": '<?= $_SESSION['user_id'] ?? 0; ?>',
+                        "Content-Type": "application/json" // Set Content-Type as JSON
+                    },
+                    body: JSON.stringify(data) // Convert the data to JSON format
+                })
+                .then(response => response.json()) // Assuming API returns JSON
+                .then(responseData => {
+                    const reviewModal = document.getElementById("reviewModal");
+                    $(reviewModal).modal("hide"); // Close modal after successful submission
+                })
+                .catch(error => {
+                    console.error("Error submitting rating and review:", error);
+                    alert("There was an error submitting your review.");
+                });
+        }
+
+        // Handle the star hover, hover out, and click events
+        function handleStarEvents() {
+            const stars = document.querySelectorAll(".stars");
+            stars.forEach(star => {
+                star.addEventListener("mouseenter", function() {
+                    if (!ratingLocked) {
+                        let value = this.getAttribute("data-value");
+                        highlightStars(value); // Highlight stars up to this point on hover
+                    }
+                });
+
+                star.addEventListener("mouseleave", function() {
+                    if (!ratingLocked) {
+                        highlightStars(0); // Reset hover effect when moving left
+                    }
+                });
+
+                star.addEventListener("click", function() {
+                    if (ratingLocked) return; // Prevent click if rating is locked
+                    selectedRating = this.getAttribute("data-value"); // Set the selected rating
+                    highlightStars(selectedRating); // Highlight selected stars
+                    lockRating(); // Lock the rating after selection
+
+                    const message = selectedRating >= 3 ? "Thank you for rating us!" : "Thanks! We will work to improve our service.";
+                    const thankYouMessage = document.getElementById("thankYouMessage");
+                    thankYouMessage.textContent = `${message} You rated us ${selectedRating} stars.`;
+
+                    submitRating(); // Submit the rating after click
+                });
+            });
+        }
+
+        // Handle review submission when user submits the review
+        function handleReviewSubmit() {
+            const submitReview = document.getElementById("submitReview");
+            const reviewText = document.getElementById("reviewText");
+
+            submitReview.addEventListener("click", function() {
+                let review = reviewText.value.trim();
+                submitRating(review); // Submit review with rating (if provided)
+            });
+        }
+
+        // Initialize the script once the DOM is ready
+        function init() {
+            handleStarEvents(); // Setup star hover and click events
+            handleReviewSubmit(); // Setup review submission logic
+        }
+
+        init(); // Start the process when DOM is fully loaded
     });
 </script>
 
@@ -892,6 +955,55 @@ echo html_scripts(
         `;
     });
 </script>
+
+<!-- <script>
+    document.getElementById('loginForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        const form = this;
+        form.classList.add('was-validated');
+
+        if (!form.checkValidity()) return;
+
+        const email = document.getElementById('exampleInputEmail1').value;
+        const password = document.getElementById('exampleInputPassword1').value;
+        const loginMessage = document.getElementById('loginMessage');
+
+        loginMessage.innerHTML = "Logging in...";
+
+        try {
+            const response = await fetch('api/v1/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'HU': '</?= $hu; ?>'
+                },
+                body: JSON.stringify({
+                    email,
+                    password
+                })
+            });
+
+            const data = await response.json();
+
+            if (response.ok) {
+                // loginMessage.innerHTML = `<div class="alert alert-success">Login successful! Welcome back.</div>`;
+                Notiflix.Notify.success('Login successful! Welcome back.');
+                setTimeout(() => {
+                    location.reload(); // Reload the same page after successful login
+                }, 1500);
+            } else {
+                Notiflix.Notify.failure(`${data.error}`);
+                // loginMessage.innerHTML = `<div class="alert alert-danger">}</div>`;
+            }
+        } catch (error) {
+            // loginMessage.innerHTML = `<div class="alert alert-danger">An error occurred. Please try again.</div>`;
+            Notiflix.Notify.failure('An error occurred. Please try again.');
+
+        }
+    });
+</script> -->
 
 </body>
 
