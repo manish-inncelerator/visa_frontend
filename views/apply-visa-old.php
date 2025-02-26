@@ -322,21 +322,7 @@ if (empty($countryData)) {
 }
 ?>
 
-<?php
-// Check if user is logged in, then fetch the latest unfinished order for the given country
-if (isset($_SESSION['user_id'])) {
-    $orders = $database->get('orders', ['is_finished', 'is_processing', 'order_id'], [
-        'ORDER' => ['id' => 'DESC'],
-        'LIMIT' => 1,
-        'AND' => [
-            'order_user_id' => $_SESSION['user_id'],
-            'is_finished' => 0,
-            'is_archive' => 0,
-            'country_id' => $countryData['id'],
-        ]
-    ]);
-}
-?>
+
 
 <!-- Navbar -->
 <?php
@@ -349,33 +335,6 @@ if (isset($_SESSION['user_id'])) {
 <!-- ./Navbar -->
 
 <!-- country details -->
-<?php if ($orders): ?>
-    <section class="container">
-        <div class="row">
-            <div class="col-12">
-                <?php if ($orders['is_finished'] == 1 && $orders['is_processing'] == 1): ?>
-                    <div class="alert alert-info mt-3 mb-0">
-                        <i class="bi bi-info-circle"></i> You have recently applied for <?= $country_name; ?> visa. <a href="visa-status" class="text-golden">Check your visa status</a>.
-                    </div>
-                <?php endif; ?>
-                <?php if ($orders['is_finished'] == 0): ?>
-                    <div class="alert alert-warning mt-3 mb-0 d-flex justify-content-between align-items-center">
-                        <span>
-                            <i class="bi bi-info-circle"></i> You are in the process of applying for <?= $country_name; ?> visa.
-                        </span>
-                        <a href="application/<?= $orders['order_id']; ?>/persona"
-                            class="btn btn-blue rounded-pill px-4 py-2 d-flex align-items-center">
-                            Complete your visa application
-                        </a>
-                    </div>
-
-
-
-                <?php endif; ?>
-            </div>
-        </div>
-    </section>
-<?php endif; ?>
 <section class="container mt-2">
     <div class="row">
         <?php
@@ -815,12 +774,7 @@ if (isset($_SESSION['user_id'])) {
         </div>
         <div class="col-12 col-xl-4 col-xxl-4 mb-3">
             <!-- visa calculator -->
-            <?php if (isset($orders) || $orders['is_finished'] == 1 || $orders['is_processing'] == 1): ?>
-                <!-- Calculator is hidden -->
-            <?php else: ?>
-                <?php require 'components/Calculator.php'; ?>
-            <?php endif; ?>
-
+            <?php require 'components/Calculator.php'; ?>
             <!-- ./visa calculator -->
         </div>
     </div>
@@ -908,56 +862,8 @@ echo html_scripts(
 
 <script>
     // Dynamically injecting PHP values into JavaScript variables
-    const embassyFeePerTraveller = <?= (float) ($visaDetail['embassy_fee'] ?? 0); ?>;
-    const portifyFees = <?= isset($visaDetail['portify_fees']) ? (float) $visaDetail['portify_fees'] : 0; ?>;
-    const vfsFees = <?= isset($visaDetail['vfs_service_fees']) ? (float) $visaDetail['vfs_service_fees'] : 0; ?>;
-    const ourFeePerTraveller = portifyFees + vfsFees;
-    const applyButton = document.querySelector('#applyButton');
-
-    let travellerCount = 1;
-
-    const updateTravellers = (amount) => {
-        travellerCount = Math.min(6, Math.max(1, travellerCount + amount)); // Ensure between 1 and 6 travellers
-        if (travellerCount === 6 && amount > 0) showModal(); // Show modal if count exceeds 6
-        updateUI();
-    };
-
-    const updateUI = () => {
-        document.getElementById('travellerCount').textContent = travellerCount;
-        document.getElementById('travellerInput').value = travellerCount;
-        document.getElementById('embassyFeeMultiplier').textContent = travellerCount;
-
-        // Only update the fee multipliers if they exist in the DOM
-        if (document.getElementById('ourFeeMultiplier')) {
-            document.getElementById('ourFeeMultiplier').textContent = travellerCount;
-        }
-        if (document.getElementById('vfsFeeMultiplier')) {
-            document.getElementById('vfsFeeMultiplier').textContent = travellerCount;
-        }
-
-        document.getElementById('totalAmount').textContent = formatCurrency((embassyFeePerTraveller + ourFeePerTraveller) * travellerCount);
-
-        applyButton.disabled = travellerCount > 5;
-    };
-
-    const showModal = () => {
-        // Use Bootstrap's modal functionality to show the modal
-        new bootstrap.Modal(document.getElementById('travellerLimitModal')).show();
-    };
-
-    const formatCurrency = (amount) => {
-        return new Intl.NumberFormat('en-SG', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
-        }).format(amount);
-    };
-</script>
-
-<!-- 
-<script>
-    // Dynamically injecting PHP values into JavaScript variables
-    const embassyFeePerTraveller = </?= (float) $visaDetail['embassy_fee']; ?>;
-    const ourFeePerTraveller = </?= (float) $visaDetail['portify_fees'] + (float) $visaDetail['vfs_service_fees']; ?>;
+    const embassyFeePerTraveller = <?= (float) $visaDetail['embassy_fee']; ?>;
+    const ourFeePerTraveller = <?= (float) $visaDetail['portify_fees'] + (float) $visaDetail['vfs_service_fees']; ?>;
     const applyButton = document.querySelector('#applyButton');
 
     let travellerCount = 1;
@@ -991,7 +897,8 @@ echo html_scripts(
         return new Intl.NumberFormat('en-SG').format(amount);
     };
 </script>
- -->
+
+
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
@@ -1027,32 +934,239 @@ echo html_scripts(
 
         // Prevent form submission if validation fails
         form.addEventListener('submit', function(event) {
-            if (!journeyDate.value || !arrivalDate.value) {
-                event.preventDefault();
-                event.stopPropagation();
-                Notiflix.Notify.failure('Please choose both Journey Date and Arrival Date.');
-                journeyDate.classList.add('is-invalid');
-                arrivalDate.classList.add('is-invalid');
-                return;
-            } else {
-                journeyDate.classList.remove('is-invalid');
-                arrivalDate.classList.remove('is-invalid');
-                journeyDate.classList.add('is-valid');
-                arrivalDate.classList.add('is-valid');
-            }
-
             if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();
-                Notiflix.Notify.failure('Please fill out all required fields correctly.');
             }
-
             form.classList.add('was-validated');
         }, false);
     });
 </script>
 
+<script>
+    // Rating and Review
+    document.addEventListener("DOMContentLoaded", function() {
+        let selectedRating = 0;
+        let loggedIn = false; // Set dynamically based on user session
+        let ratingLocked = false;
 
+        // Check if the user is logged in and set the loggedIn variable
+        function checkLoginStatus() {
+            const userId = '<?= $_SESSION['user_id'] ?? ''; ?>'; // Get user ID from session
+            loggedIn = userId ? true : false;
+            return userId;
+        }
+
+        // Show the appropriate modal based on login status
+        function showModalBasedOnLogin(userId) {
+            if (!userId) {
+                const logoutModal = document.getElementById("logoutModal");
+                $(logoutModal).modal("show");
+                return false;
+            }
+            const reviewModal = document.getElementById("reviewModal");
+            $(reviewModal).modal("show");
+            return true;
+        }
+
+        // Highlight the stars based on the selected rating or hover effect
+        function highlightStars(value) {
+            const stars = document.querySelectorAll(".stars");
+            stars.forEach(star => {
+                let starValue = star.getAttribute("data-value");
+                star.classList.remove("bi-star", "bi-star-fill", "selected");
+                if (starValue <= value) {
+                    star.classList.add("bi-star-fill", "selected");
+                } else {
+                    star.classList.add("bi-star");
+                }
+            });
+        }
+
+        // Lock the rating to prevent changes after submission
+        function lockRating() {
+            ratingLocked = true;
+            const stars = document.querySelectorAll(".stars");
+            stars.forEach(star => {
+                star.classList.add("locked");
+            });
+        }
+
+        // Submit the rating (and review if available) to the server
+        function submitRating(review = "") {
+            const userId = checkLoginStatus(); // Check if the user is logged in
+            if (!showModalBasedOnLogin(userId)) return; // Show the appropriate modal if not logged in
+
+            // Prepare data to be sent to the API
+            const data = {
+                rating: selectedRating,
+                review: review || '' // If no review, send an empty string
+            };
+
+            // Send the data as JSON to the API
+            fetch("api/v1/rate-and-review", {
+                    method: "POST",
+                    headers: {
+                        "HU": '<?= $hu; ?>',
+                        "X-Country-Id": '<?= $countryData['id']; ?>',
+                        "X-Person-Id": '<?= $_SESSION['user_id'] ?? 0; ?>',
+                        "Content-Type": "application/json" // Set Content-Type as JSON
+                    },
+                    body: JSON.stringify(data) // Convert the data to JSON format
+                })
+                .then(response => response.json()) // Assuming API returns JSON
+                .then(responseData => {
+                    const reviewModal = document.getElementById("reviewModal");
+                    $(reviewModal).modal("hide"); // Close modal after successful submission
+                })
+                .catch(error => {
+                    console.error("Error submitting rating and review:", error);
+                    alert("There was an error submitting your review.");
+                });
+        }
+
+        // Handle the star hover, hover out, and click events
+        function handleStarEvents() {
+            const stars = document.querySelectorAll(".stars");
+            stars.forEach(star => {
+                star.addEventListener("mouseenter", function() {
+                    if (!ratingLocked) {
+                        let value = this.getAttribute("data-value");
+                        highlightStars(value); // Highlight stars up to this point on hover
+                    }
+                });
+
+                star.addEventListener("mouseleave", function() {
+                    if (!ratingLocked) {
+                        highlightStars(0); // Reset hover effect when moving left
+                    }
+                });
+
+                star.addEventListener("click", function() {
+                    if (ratingLocked) return; // Prevent click if rating is locked
+                    selectedRating = this.getAttribute("data-value"); // Set the selected rating
+                    highlightStars(selectedRating); // Highlight selected stars
+                    lockRating(); // Lock the rating after selection
+
+                    const message = selectedRating >= 3 ? "Thank you for rating us!" : "Thanks! We will work to improve our service.";
+                    const thankYouMessage = document.getElementById("thankYouMessage");
+                    thankYouMessage.textContent = `${message} You rated us ${selectedRating} stars.`;
+
+                    submitRating(); // Submit the rating after click
+                });
+            });
+        }
+
+        // Handle review submission when user submits the review
+        function handleReviewSubmit() {
+            const submitReview = document.getElementById("submitReview");
+            const reviewText = document.getElementById("reviewText");
+
+            submitReview.addEventListener("click", function() {
+                let review = reviewText.value.trim();
+                submitRating(review); // Submit review with rating (if provided)
+            });
+        }
+
+        // Initialize the script once the DOM is ready
+        function init() {
+            handleStarEvents(); // Setup star hover and click events
+            handleReviewSubmit(); // Setup review submission logic
+        }
+
+        init(); // Start the process when DOM is fully loaded
+    });
+</script>
+
+<script>
+    // Function to format text
+    function formatText(command) {
+        document.execCommand(command, false, null);
+    }
+
+    // Function to capture the formatted content before submitting
+    function submitReview() {
+        document.getElementById('reviewContent').value = document.getElementById('review').innerHTML;
+    }
+
+    // Initialize Bootstrap Tooltips
+    document.addEventListener("DOMContentLoaded", function() {
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+        tooltipTriggerList.map(function(tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+        });
+    });
+
+    // Keyboard Shortcuts for Text Formatting (Ctrl + B, Ctrl + I, Ctrl + U, etc.)
+    document.addEventListener("keydown", function(event) {
+        if (event.ctrlKey || event.metaKey) { // Support for Mac (Cmd key)
+            switch (event.key.toLowerCase()) {
+                case 'b': // Ctrl + B → Bold
+                    event.preventDefault();
+                    formatText('bold');
+                    break;
+                case 'i': // Ctrl + I → Italic
+                    event.preventDefault();
+                    formatText('italic');
+                    break;
+                case 'u': // Ctrl + U → Underline
+                    event.preventDefault();
+                    formatText('underline');
+                    break;
+                case 'l': // Ctrl + L → Ordered List (1.)
+                    event.preventDefault();
+                    formatText('insertOrderedList');
+                    break;
+                case 'm': // Ctrl + M → Unordered List (•)
+                    event.preventDefault();
+                    formatText('insertUnorderedList');
+                    break;
+                case '/': // Ctrl + / → Open Shortcut Modal
+                    event.preventDefault();
+                    var modal = new bootstrap.Modal(document.getElementById('shortcutsModal'));
+                    modal.show();
+                    break;
+            }
+        }
+    });
+</script>
+
+<!-- Ratings -->
+<script>
+    // Rating data
+    const ratings = {
+        5: 33607,
+        4: 18473,
+        3: 7239,
+        2: 2447,
+        1: 6051
+    };
+
+    const totalRatings = Object.values(ratings).reduce((a, b) => a + b, 0);
+
+    const ratingColors = {
+        5: "bg-green",
+        4: "bg-light-green",
+        3: "bg-yellow",
+        2: "bg-orange",
+        1: "bg-red"
+    };
+
+    const ratingsContainer = document.getElementById("ratings-container");
+
+    Object.keys(ratings).reverse().forEach(rating => {
+        const percentage = (ratings[rating] / totalRatings) * 100;
+        ratingsContainer.innerHTML += `
+            <div class="rating-row d-flex align-items-center my-2">
+                <span class="rating-number">${rating} ★</span>
+                <div class="rating-bar mx-2 flex-grow-1">
+                    <div class="rating-fill ${ratingColors[rating]}" style="width: ${percentage}%;"></div>
+                </div>
+                <span class="text-muted">${ratings[rating]}</span>
+            </div>
+        `;
+    });
+</script>
 
 <!-- <script>
     document.getElementById('loginForm').addEventListener('submit', async function(event) {

@@ -6,7 +6,7 @@
                 <div class="d-flex align-items-center">
                     <i class="bi bi-calendar-event fs-3 iconnn me-3"></i>
                     <div>
-                        <div class="fw-500">Visa Processing Time</div>
+                        <div class="fw-bold">Visa Processing Timeline</div>
                         <div class="text-secondary">
                             <?= $visaDetail['processing_time_value']; ?> <?= $visaDetail['processing_time_unit']; ?>
                         </div>
@@ -15,14 +15,16 @@
             </div>
             <!-- Journey Dates -->
             <div class="date-picker-section mb-4">
-                <div class="section-title mb-3"><i class="bi bi-calendar-event"></i> Travel Dates</div>
+                <p class="alert alert-warning text-justify"><i class="bi bi-info-circle"></i> These dates can be approximate and are only required to get you a visa. You may make changes later as per visa issuance period.
+                </p>
+                <div class="section-title mb-3"><i class="bi bi-calendar-event"></i> Tentative Travel Dates</div>
                 <div class="row g-3">
                     <!-- Date of Journey -->
                     <div class="col-md-12">
                         <div class="date-picker-card border rounded-3">
                             <div class="card-body">
                                 <label class="form-label" for="dateOfJourney">
-                                    <i class="bi bi-calendar-event"></i> Date of Journey
+                                    <i class="bi bi-calendar-event"></i> Tentative Date of Journey
                                 </label>
                                 <input type="date"
                                     class="form-control"
@@ -40,7 +42,7 @@
                         <div class="date-picker-card border rounded-3">
                             <div class="card-body">
                                 <label class="form-label" for="dateOfArrival">
-                                    <i class="bi bi-calendar-check"></i> Date of Arrival
+                                    <i class="bi bi-calendar-check"></i> Tentative Date of Arrival
                                 </label>
                                 <input type="date"
                                     class="form-control"
@@ -78,20 +80,27 @@
                         <span class="feeMultiplier" id="embassyFeeMultiplier">1</span>
                     </div>
                 </div>
-                <div class="fee-row d-flex justify-content-between align-items-center">
-                    <div><i class="bi bi-shield-check"></i> Our fee</div>
-                    <div>
-                        S$<?= number_format((float)$visaDetail['portify_fees'], 2); ?> x
-                        <span class="feeMultiplier" id="ourFeeMultiplier">1</span>
-                    </div>
-                </div>
-                <div class="fee-row d-flex justify-content-between align-items-center">
-                    <div><i class="bi bi-shield-check"></i> VFS fee</div>
-                    <div>
-                        S$<?= number_format((float)$visaDetail['vfs_service_fees'], 2); ?> x
-                        <span class="feeMultiplier" id="vfsFeeMultiplier">1</span>
-                    </div>
-                </div>
+                <?php if ($visaDetail['portify_fees'] > 0 || $visaDetail['vfs_service_fees'] > 0): ?>
+                    <?php if ($visaDetail['portify_fees'] > 0): ?>
+                        <div class="fee-row d-flex justify-content-between align-items-center">
+                            <div><i class="bi bi-shield-check"></i> Our fee</div>
+                            <div>
+                                S$<?= number_format((float)$visaDetail['portify_fees'], 2); ?> x
+                                <span class="feeMultiplier" id="ourFeeMultiplier">1</span>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($visaDetail['vfs_service_fees'] > 0): ?>
+                        <div class="fee-row d-flex justify-content-between align-items-center">
+                            <div><i class="bi bi-shield-check"></i> VFS fee</div>
+                            <div>
+                                S$<?= number_format((float)$visaDetail['vfs_service_fees'], 2); ?> x
+                                <span class="feeMultiplier" id="vfsFeeMultiplier">1</span>
+                            </div>
+                        </div>
+                    <?php endif; ?>
+                <?php endif; ?>
             </div>
             <!-- Total -->
             <div class="fee-row d-flex justify-content-between align-items-center mb-4">

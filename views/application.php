@@ -41,7 +41,7 @@ try {
     }
 
     // Fetch the order_id from the database for the logged-in user
-    $getOrder = $database->get("orders", "order_id", [
+    $getOrder = $database->get("orders", ["order_id", "country_id"], [
         "AND" => [
             "order_user_id" => $user_id,
             "order_id"      => $order_id
@@ -56,6 +56,11 @@ try {
 
     // Fetch visa passenger details
     $visaPax = $database->get('orders', ['no_of_pax'], ['order_id' => $order_id]);
+
+    // Country Name
+    $countryName = $database->get('countries', 'country_name', [
+        'id' => $getOrder['country_id']
+    ]); // Fetch the country name as a string
 } catch (Exception $e) {
     die("Database Error: " . $e->getMessage()); // Debugging, remove in production
 }

@@ -31,21 +31,21 @@ if (isset($_SESSION['user_id'])) {
 <!-- ./Navbar -->
 
 <!-- Hero Section -->
-<section class="container-fluid hero-section" id="heroSection">
+<section class="container-fluid hero-section text-white" id="heroSection">
     <div class="container h-100">
         <div class="row h-100 align-items-center justify-content-center">
-            <div class="col-12 text-center text-dark">
+            <div class="col-12 text-center">
                 <h1>Your Visa, Simplified!</h1>
                 <h2 class="mb-4 h4 alterFont">Your visa process, simplified with expert guidance at each stage</h2>
-                <form action="search" method="get" class="mx-auto" id="searchForm" style="width:300px;" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
-                    <!-- Search -->
+                <!-- Search Form -->
+                <form action="search" method="get" class="mx-auto" id="searchForm" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false">
                     <div class="custom-search-card">
                         <div class="custom-input-wrapper">
                             <span class="custom-input-icon"><i class="bi bi-geo-alt-fill"></i></span>
                             <input autofocus type="text" id="searchDestination" class="custom-input" name="q" placeholder="Search a Country" required>
                             <div class="custom-buttons">
                                 <button class="custom-btn-search rounded-pill" type="submit">
-                                    <i class="bi bi-search"></i> Search
+                                    <i class="bi bi-search"></i>
                                 </button>
                                 <button class="custom-btn-voice" type="button">
                                     <i class="bi bi-mic"></i>
@@ -54,22 +54,20 @@ if (isset($_SESSION['user_id'])) {
                             <label for="searchDestination" class="custom-input-label">Where to?</label>
                         </div>
                     </div>
-                    <!-- ./Search -->
-
-                    <div class="trending-places mt-2">
-                        <strong class="me-2">Trending places</strong>
-                        <br class="d-block d-lg-none">
-                        <a class="text-white me-2" href="country/apply-for-singapore-visa-online">Singapore</a>
-                        <a class="text-white me-2" href="country/apply-for-tokyo-visa-online">Tokyo</a>
-                        <a class="text-white me-2" href="country/apply-for-paris-visa-online">Paris</a>
-                        <a class="text-white me-2" href="country/apply-for-new-york-visa-online">New York</a>
-                    </div>
                 </form>
+                <!-- ./Search Form -->
+                <div class="trending-places">
+                    <strong class="me-2 mt-2">Trending places</strong>
+                    <br class="d-block d-lg-none">
+                    <a class="text-golden me-2" href="country/apply-for-singapore-visa-online">Singapore</a>
+                    <a class="text-golden me-2" href="country/apply-for-united-arab-emirates-visa-online">United Arab Emirates</a>
+                </div>
 
             </div>
         </div>
     </div>
 </section>
+
 
 <!-- Shuffle Section -->
 <!-- <section class="container my-3">
@@ -105,14 +103,79 @@ if (isset($_SESSION['user_id'])) {
     </div>
 </section>
 
+<!-- Why Book With Us -->
+<section class="container my-5">
+    <div class="row">
+        <div class="col">
+            <h2 class="fw-bold text-center mb-4">Why Choose Us?</h2>
+            <div class="row g-4">
+                <!-- Experience Card -->
+                <div class="col-lg-3 col-12">
+                    <div class="booking-feature border text-center">
+                        <div class="booking-feature-body">
+                            <div class="icon-wrapper">
+                                <!-- Bootstrap Icon for "Star" -->
+                                <i class="bi bi-star feature-icon fs-1"></i>
+                            </div>
+                            <h5 class="mb-3">Proven Experience</h5>
+                            <p class="text-muted">Trusted by thousands of travelers for 15 years</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-12">
+                    <div class="booking-feature border text-center">
+                        <div class="booking-feature-body">
+                            <div class="icon-wrapper">
+                                <!-- Bootstrap Icon for "Check Circle" -->
+                                <i class="bi bi-people feature-icon fs-1"></i>
+                            </div>
+                            <h5 class="mb-3">Expert Team</h5>
+                            <p class="text-muted">Our team consists of highly experienced professionals.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-12">
+                    <div class="booking-feature border text-center">
+                        <div class="booking-feature-body">
+                            <div class="icon-wrapper">
+                                <!-- Bootstrap Icon for "Calendar" -->
+                                <i class="bi bi-emoji-smile feature-icon fs-1"></i>
+                            </div>
+                            <h5 class="mb-3">End-to-End Visa Services</h5>
+                            <p class="text-muted">Comprehensive visa assistance from application to approval, ensuring a hassle-free process.</p>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-12">
+                    <div class="booking-feature border text-center">
+                        <div class="booking-feature-body">
+                            <div class="icon-wrapper">
+                                <!-- Bootstrap Icon for "Shield Lock" -->
+                                <i class="bi bi-shield-check feature-icon fs-1"></i>
+                            </div>
+                            <h5 class="mb-3">Safety and Privacy</h5>
+                            <p class="text-muted">Your security is our priority with robust protection for your data.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+<!-- ./Why Book With Us -->
 
 <!-- How it Works section -->
 <section class="visa-section my-5" id="how-it-works">
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-lg-8 text-center section-title">
-                <h1 class="fw-bold mb-2 golden-text">Expert Visa Application with Fayyaz Travels</h1>
-                <p class="subtitle fs-4">Your hassle-free journey begins with our 4-step process</p>
+                <h2 class="fw-bold mt-5">Expert Visa Application with Fayyaz Travels</h2>
+                <p class="subtitle fs-5">Your hassle-free journey begins with our 4-step process</p>
             </div>
         </div>
 
@@ -120,10 +183,10 @@ if (isset($_SESSION['user_id'])) {
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="step-card">
                     <div class="card-body text-center">
+                        <div class="step-number">1</div>
                         <div class="step-icon">
                             <i class="bi bi-file-earmark-text"></i>
                         </div>
-                        <div class="step-number">1</div>
                         <h3 class="step-title">Quick Application</h3>
                         <p class="step-description">Fill out your details & make a secure payment</p>
                         <ul class="feature-list">
@@ -140,10 +203,10 @@ if (isset($_SESSION['user_id'])) {
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="step-card">
                     <div class="card-body text-center">
+                        <div class="step-number">2</div>
                         <div class="step-icon">
                             <i class="bi bi-cpu"></i>
                         </div>
-                        <div class="step-number">2</div>
                         <h3 class="step-title">AI-Powered Processing</h3>
                         <p class="step-description">Speedy documentation with advanced AI</p>
                         <ul class="feature-list">
@@ -160,14 +223,14 @@ if (isset($_SESSION['user_id'])) {
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="step-card">
                     <div class="card-body text-center">
+                        <div class="step-number">3</div>
                         <div class="step-icon">
                             <i class="bi bi-person-check"></i>
                         </div>
-                        <div class="step-number">3</div>
                         <h3 class="step-title">Expert Review</h3>
                         <p class="step-description">Double checked by our specialists and in-house AI</p>
                         <ul class="feature-list">
-                            <li>Human expertise</li>
+                            <li>Human and in-house AI expertise</li>
                             <li>99.8% approval rate</li>
                             <li>Error-free applications</li>
                         </ul>
@@ -180,10 +243,10 @@ if (isset($_SESSION['user_id'])) {
             <div class="col-md-6 col-lg-3 mb-4">
                 <div class="step-card">
                     <div class="card-body text-center">
+                        <div class="step-number mb-3">4</div>
                         <div class="step-icon">
                             <i class="bi bi-airplane"></i>
                         </div>
-                        <div class="step-number">4</div>
                         <h3 class="step-title">Visa Delivery</h3>
                         <p class="step-description">Sit back as we deliver your visa on time</p>
                         <ul class="feature-list">
@@ -280,6 +343,9 @@ if (isset($_SESSION['user_id'])) {
     </div>
 </section>
 
+<!-- Reviews -->
+<?php require 'components/Reviews.php'; ?>
+
 <!-- Listening modal -->
 <div class="modal fade" id="listeningModal" tabindex="-1" aria-labelledby="listeningModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -290,6 +356,8 @@ if (isset($_SESSION['user_id'])) {
         </div>
     </div>
 </div>
+
+
 
 <!-- Footer -->
 <?php require 'components/Footer.php'; ?>

@@ -25,8 +25,8 @@ $pages = $database->select('pages', '*', [
         <div class="d-flex">
             <!-- Profile Dropdown -->
             <div class="dropdown me-2">
-                <button class="btn btn-white dropdown-toggle" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem;">
-                    <img src="assets/images/dp/no-user.jpg" alt="Profile" class="rounded-circle" width="30" height="30">
+                <button class="btn btn-white" type="button" id="profileDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem;">
+                    <img src="assets/images/dp/no-user.jpg" alt="Profile" class="rounded-circle" width="36" height="36">
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="profileDropdown">
                     <!-- <li><a class="dropdown-item" href="profile">Profile</a></li> -->
@@ -34,6 +34,25 @@ $pages = $database->select('pages', '*', [
                     <li><a class="dropdown-item" href="logout">Logout</a></li>
                 </ul>
             </div>
+
+            <!-- <div class="d-flex align-items-center">
+                <!-- Notifications Dropdown
+            <div class="dropdown me-3">
+                <button class="btn btn-white position-relative" type="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-bell fs-5"></i>
+                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="notificationCount">3</span>
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+                    <li><a class="dropdown-item" href="#">New message received</a></li>
+                    <li><a class="dropdown-item" href="#">Your order has been shipped</a></li>
+                    <li><a class="dropdown-item" href="#">Reminder: Meeting at 3 PM</a></li>
+                    <li>
+                        <hr class="dropdown-divider">
+                    </li>
+                    <li><a class="dropdown-item text-center" href="#">View all notifications</a></li>
+                </ul>
+            </div> -->
+
             <a target="_blank" href="https://api.whatsapp.com/send/?phone=6594314389&text=Hi!%20I%20am%20interested%20in%20visa%20processing&type=phone_number&app_absent=0" class="btn btn-blue rounded-pill me-2" type="submit" style="display: flex; align-items: center; justify-content: center; padding: 0.5rem 1rem;">
                 <i class="bi bi-whatsapp" style="margin-right: 8px;"></i> Chat
             </a>

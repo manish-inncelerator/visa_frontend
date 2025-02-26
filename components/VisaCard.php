@@ -1,6 +1,13 @@
 <?php
 // Define the search condition (if $escapedQuery is set)
-$searchCondition = !empty($escapedQuery) ? ["countries.country_name[~]" => "%{$escapedQuery}%"] : [];
+$searchCondition = [
+    "countries.is_active" => 1 // Ensure only active countries are fetched
+];
+
+// Add search filter if a query is provided
+if (!empty($escapedQuery)) {
+    $searchCondition["countries.country_name[~]"] = "%{$escapedQuery}%";
+}
 
 // Fetch destinations from the database with images
 try {
@@ -30,6 +37,7 @@ try {
 } catch (Exception $e) {
     $destinations = []; // Ensure $destinations is an array to avoid issues in the foreach loop
 }
+
 ?>
 
 
@@ -70,12 +78,19 @@ try {
                         $totalFee = (float) $destination['portify_fees'] + (float) $destination['vfs_service_fees'];
                         ?>
                         <div class="price-display fw-bold plexFont" style="color: var(--blue-dark);">S$<?= $destination['embassy_fee']; ?></div>
-                        <div class="fees-text alterFont" style="color: var(--blue-light);">+S$<?= $totalFee; ?> <small class="text-muted">(Our Fee + VFS Service Fee)</small></div>
+                        <?php if ($totalFee > 0): ?>
+                            <div class="fees-text alterFont" style="color: var(--blue-light);">
+                                +S$<?= $totalFee; ?> <small class="text-muted">(Admin Fee + Visa Fee)</small>
+                            </div>
+                        <?php endif; ?>
                     </div>
 
                     <div class="text-end">
                         <div class="processing-time mb-1 alterFont small" style="color: var(--blue-light);">Processing Timeline</div>
-                        <div class="days-display alterFont fw-bold" style="color: var(--blue-dark);"><?= $destination['processing_time_value']; ?> <?= $destination['processing_time_unit']; ?></div>
+                        <div class="days-display alterFont fw-bold" style="color: var(--blue-dark);">
+                            <?= ($destination['processing_time_value'] < 10 ? '⚡' : '') . $destination['processing_time_value']; ?>
+                            <?= $destination['processing_time_unit']; ?>
+                        </div>
                     </div>
                 </div>
 

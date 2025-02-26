@@ -93,9 +93,15 @@ $encryptedId = encryptData($travelers[0]['id'], $encryptionKey);
     <a href="application/<?= $order_id; ?>/passport" class="btn btn-golden btn-lg rounded-pill p-3 plexFont fw-bold fs-6">
         <i class="bi bi-chevron-left"></i> Back
     </a>
-    <a href="application/<?= $order_id; ?>/details?tid=<?= $encryptedId; ?>" type="submit" class="btn cta-button btn-disabled btn-lg rounded-pill p-3 plexFont fw-bold fs-6" id="saveNextBtnDocs" disabled>
-        Save and Next <i class="bi bi-chevron-right"></i>
-    </a>
+    <?php if ($countryName === 'Singapore'): ?>
+        <a href="application/<?= $order_id; ?>/details?tid=<?= $encryptedId; ?>" type="submit" class="btn cta-button btn-disabled btn-lg rounded-pill p-3 plexFont fw-bold fs-6" id="saveNextBtnDocs" disabled>
+            Save and Next <i class="bi bi-chevron-right"></i>
+        </a>
+    <?php else: ?>
+        <a href="application/<?= $order_id; ?>/checkout" type="submit" class="btn cta-button btn-disabled btn-lg rounded-pill p-3 plexFont fw-bold fs-6" id="saveNextBtnDocs" disabled>
+            Save and Next <i class="bi bi-chevron-right"></i>
+        </a>
+    <?php endif; ?>
 </div>
 
 

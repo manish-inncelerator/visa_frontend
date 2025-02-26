@@ -1,5 +1,5 @@
 <?php
-// Define steps as you have
+// Define steps
 $steps = [
     [
         'step_number' => 1,
@@ -31,18 +31,24 @@ $steps = [
         'subtitle' => 'Upload documents',
         'status' => 'pending'
     ],
-    [
+];
+
+// Conditionally add "Details" step if the country is Singapore
+if ($countryName === 'Singapore') {
+    $steps[] = [
         'step_number' => 6,
         'title' => 'Details',
         'subtitle' => 'Fill in the form',
         'status' => 'pending'
-    ],
-    [
-        'step_number' => 7,
-        'title' => 'Checkout',
-        'subtitle' => 'Complete payment',
-        'status' => 'final'
-    ]
+    ];
+}
+
+// Add "Checkout" step
+$steps[] = [
+    'step_number' => count($steps) + 1,
+    'title' => 'Checkout',
+    'subtitle' => 'Complete payment',
+    'status' => 'final'
 ];
 
 ?>
@@ -56,7 +62,6 @@ $steps = [
             if ($currentStep === 'docs') {
                 $currentStep = 'other documents'; // Ensure it matches the step title
             }
-
 
             if ($stepTitleLower === $currentStep) {
                 $step['status'] = 'active'; // Mark current as active
