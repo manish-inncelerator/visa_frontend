@@ -70,6 +70,9 @@ $steps[] = [
             } else {
                 $step['status'] = 'pending'; // Mark future steps as pending
             }
+
+            // Determine text color class
+            $textClass = ($step['status'] === 'completed') ? 'text-success' : (($step['status'] === 'active') ? 'text-dark' : 'text-muted');
         ?>
             <div class="step-item">
                 <div class="step-content">
@@ -77,8 +80,8 @@ $steps[] = [
                         <?= $step['status'] === 'completed' ? '<i class="bi bi-check-circle"></i>' : $step['step_number'] ?>
                     </div>
                     <div class="step-text">
-                        <div class="step-title"><?= htmlspecialchars($step['title']) ?></div>
-                        <div class="step-subtitle"><?= htmlspecialchars($step['subtitle']) ?></div>
+                        <div class="step-title <?= $textClass ?>"><?= htmlspecialchars($step['title']) ?></div>
+                        <div class="step-subtitle <?= $textClass ?>"><?= htmlspecialchars($step['subtitle']) ?></div>
                     </div>
                 </div>
             </div>
