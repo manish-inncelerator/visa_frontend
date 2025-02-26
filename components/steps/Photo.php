@@ -8,6 +8,16 @@ $photos = $database->select('photos', '*', [
     'is_finished' => 1
 ]);
 
+// check persona table if is_finished = 1 then show photo upload page else redirect to persona page
+$persona_check = $database->get('travelers', 'is_finished', [
+    'order_id' => $order_id
+]);
+
+if ($persona_check === 0 || $persona_check === null || $persona_check === '') {
+    header('Location: persona');
+    exit;
+}
+
 // Organize photos by traveler_id for quick lookup
 $photoMap = [];
 foreach ($photos as $photo) {

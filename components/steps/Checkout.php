@@ -1,14 +1,37 @@
-<!-- </?php
-// $price = $database->get('orders', ['order_total', 'order_currency'], [
-//     'order_id' => $order_id
-// ]);
-// if ($price['order_currency'] === '') {
-//     $payCurr = 'SGD';
-// } else {
-//     $payCurr = $price['order_currency'];
-// }
+<?php
+if ($countryName != 'Singapore') {
+    $docs = $database->get('documents', 'is_finished', [
+        'order_id' => $order_id
+    ]);
+} else {
+    $declarations = $database->get('declarations', 'is_finished', [
+        'order_id' => $order_id
+    ]);
+}
+
+// Print the value correctly
+// Convert null values to 0
+$docs = $docs ?? 0;
+$declarations = $declarations ?? 0;
+
+// Set to 1 if any of them is truthy (not empty, not 0)
+$ifAllStepsDone = ($docs || $declarations) ? 1 : 0;
+
+
+if ($ifAllStepsDone === 0) {
+    header('Location: persona');
+    exit; // Ensure script execution stops after redirection
+}
+/*$price = $database->get('orders', ['order_total', 'order_currency'], [
+'order_id' => $order_id
+]);
+if ($price['order_currency'] === '') {
+$payCurr = 'SGD';
+} else {
+$payCurr = $price['order_currency'];
+}*/
 ?>
-<div class="card">
+<!-- <div class="card">
     <div class="card-header"><i class="bi bi-bag-heart-fill"></i> Checkout</div>
     <div class="card-body text-center">
         <h2><b>Congratulations 🎉 form submitted successfully.</b></h2>

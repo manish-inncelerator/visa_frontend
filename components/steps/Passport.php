@@ -8,6 +8,19 @@ $passports = $database->select('passports', '*', [
     'is_finished' => 1
 ]);
 
+
+// check photo table if is_finished = 1 then show passport upload page else redirect to photo page
+$photos_check = $database->get('photos', 'is_finished', [
+    'order_id' => $order_id
+]);
+echo $photos_check;
+
+if ($photos_check === 0 || $photos_check === null || $photos_check === '') {
+    header('Location: photo');
+    exit;
+}
+
+
 // Organize passports by traveler_id for quick lookup
 $passportMap = [];
 foreach ($passports as $passport) {

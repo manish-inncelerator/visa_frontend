@@ -1,4 +1,17 @@
 <?php
+
+
+// check persona table if is_finished = 1 then show photo upload page else redirect to persona page
+$docs_check = $database->get('documents', 'is_finished', [
+    'order_id' => $order_id
+]);
+
+if ($docs_check === 0 || $docs_check === null || $docs_check === '') {
+    header('Location: passport');
+    exit;
+}
+
+
 // Fetch travelers for the given order
 $travelers = $database->select('travelers', ['name', 'id'], ['order_id' => $order_id]);
 
@@ -10,6 +23,7 @@ $docIds = json_decode($database->get('countries', 'required_documents', ['id' =>
 
 // Fetch document names based on required document IDs
 $requiredDocs = $database->select('required_documents', ['id', 'required_document_name'], ['id' => $docIds]);
+
 ?>
 
 <?php
