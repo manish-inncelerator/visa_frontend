@@ -349,7 +349,7 @@ if (isset($_SESSION['user_id'])) {
 <!-- ./Navbar -->
 
 <!-- country details -->
-<?php if ($orders): ?>
+<?php if (isset($orders)): ?>
     <section class="container">
         <div class="row">
             <div class="col-12">
@@ -814,8 +814,7 @@ if (isset($_SESSION['user_id'])) {
             <!-- ./content area -->
         </div>
         <div class="col-12 col-xl-4 col-xxl-4 mb-3">
-            <!-- visa calculator -->
-            <?php if (isset($orders) || $orders['is_finished'] == 1 || $orders['is_processing'] == 1): ?>
+            <?php if (isset($orders) && (isset($orders['is_finished']) && $orders['is_finished'] == 1 || isset($orders['is_processing']) && $orders['is_processing'] == 0)): ?>
                 <!-- Calculator is hidden -->
             <?php else: ?>
                 <?php require 'components/Calculator.php'; ?>

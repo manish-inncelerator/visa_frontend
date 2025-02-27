@@ -59,8 +59,8 @@ if (isset($_SESSION['user_id'])) {
                 <div class="trending-places">
                     <strong class="me-2 mt-2">Trending places</strong>
                     <br class="d-block d-lg-none">
-                    <a class="text-golden me-2" href="country/apply-for-singapore-visa-online">Singapore</a>
-                    <a class="text-golden me-2" href="country/apply-for-united-arab-emirates-visa-online">United Arab Emirates</a>
+                    <a class="text-golden me-2" href="country/apply-for-singapore-visa-online">🇸🇬 Singapore</a>
+                    <a class="text-golden me-2" href="country/apply-for-united-arab-emirates-visa-online">🇦🇪 United Arab Emirates</a>
                 </div>
 
             </div>
@@ -107,7 +107,17 @@ if (isset($_SESSION['user_id'])) {
 <section class="container my-5">
     <div class="row">
         <div class="col">
-            <h2 class="fw-bold text-center mb-4">Why Choose Us?</h2>
+            <div class="text-center section-title">
+                <h2 class="fw-bold mt-5">Why Choose Us?</h2>
+                <p class="subtitle fs-5">Why trust us for your visa requirements</p>
+
+
+
+
+
+
+
+            </div>
             <div class="row g-4">
                 <!-- Experience Card -->
                 <div class="col-lg-3 col-12">
