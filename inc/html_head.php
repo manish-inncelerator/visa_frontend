@@ -107,7 +107,7 @@ function html_head(
         <meta name="apple-mobile-web-app-title" content="Fayyaz Travels" />
         <!-- <link rel="stylesheet" href="assets/css/custom.css?token=$token" /> -->
         {$externalCssLinks}
-        <link rel="manifest" href="/site.webmanifest" />
+        <link rel="manifest" href="site.webmanifest" />
         {$seoContent}
         {$schemaContent}
         <title>{$title} &mdash; Fayyaz Travels</title>

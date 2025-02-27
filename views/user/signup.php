@@ -1,4 +1,12 @@
 <?php
+
+
+// Redirect to home if user is already logged in
+if (isset($_SESSION['user_id'])) {
+    header('Location: ../home');
+    exit;
+}
+
 defined('BASE_DIR') || die('Direct access denied');
 
 // Enable error reporting
@@ -21,10 +29,10 @@ echo html_head('Sign Up', null, true, ['assets/css/signup.css'], true);
 <!-- ./Navbar -->
 
 <!-- Signup Section -->
-<section class="container">
+<section class="container d-flex justify-content-center align-items-center">
     <div class="row">
         <div class="col-12">
-            <div class="form-container my-2">
+            <div class="form-container my-2 rounded-3 bg-white">
                 <!-- Icon and Header -->
                 <div class="text-center">
                     <div class="icon-circle mx-auto">
@@ -35,17 +43,17 @@ echo html_head('Sign Up', null, true, ['assets/css/signup.css'], true);
                 </div>
 
                 <!-- Sign Up Form -->
-
+                <!-- 
 
                 <a href="google" class="btn btn-outline-golden w-100">
                     <img src="assets/images/google.png" alt="">
                     Continue with Google
-                </a>
+                </a> -->
 
-
+                <!-- 
                 <div class="divider">
                     <span class="px-2 bg-white text-muted fw-bold">OR</span>
-                </div>
+                </div> -->
 
                 <form novalidate autocomplete="off" id="regForm">
                     <div class="row">
@@ -145,7 +153,16 @@ echo html_scripts(
                     Notiflix.Notify.success(data.success);
                     form.reset();
                     form.classList.remove("was-validated");
-                    location.href = 'auth/login?through=new_signup';
+                    // location.href = 'auth/login?through=new_signup';
+                    const params = new URLSearchParams(window.location.search);
+                    const goto = params.get("goto");
+                    const o = params.get("o");
+
+                    location.href = goto ?
+                        `auth/login?through=new_signup&goto=${goto}` :
+                        o ?
+                        `auth/login?through=new_signup&o=${o}` :
+                        "home";
                 } else {
                     // alert(data.error || "Login failed. Please try again.");
                     Notiflix.Notify.failure(data.error || "Login Failed. Please try again.");

@@ -1,9 +1,16 @@
 <?php
+
 defined('BASE_DIR') || die('Direct access denied');
 
 // Enable error reporting
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+
+// Redirect to home if user is already logged in
+if (isset($_SESSION['user_id'])) {
+    header('Location: ../home');
+    exit;
+}
 
 // Include required files
 require 'inc/html_head.php';
@@ -12,8 +19,6 @@ require 'database.php';
 require 'PageCache.php'; // Include the PageCache class
 require 'min.php';
 
-
-
 // Output HTML head and scripts
 echo html_head('Log in', null, true, ['assets/css/signup.css'], true);
 ?>
@@ -21,12 +26,11 @@ echo html_head('Log in', null, true, ['assets/css/signup.css'], true);
 <?php require 'components/SimpleNavbar.php'; ?>
 <!-- ./Navbar -->
 
-
 <!-- Login Section -->
-<section class="container">
-    <div class="row">
-        <div class="col-12">
-            <div class="form-container my-2">
+<section class="container d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="row w-100 justify-content-center">
+        <div class="col-12 col-md-6 col-lg-4">
+            <div class="form-container rounded-3 bg-white">
                 <?php if (isset($_GET['goto'])): ?>
                     <p class="alert alert-warning text-center mb-4"><i class="bi bi-exclamation-circle"></i> Please log in first.</p>
                 <?php endif; ?>
@@ -44,16 +48,6 @@ echo html_head('Log in', null, true, ['assets/css/signup.css'], true);
                     </div>
                     <h4 class="text-brown mb-2">Log in swiftly</h4>
                     <p class="text-muted mb-4">Get your visa quickly!</p>
-                </div>
-
-                <!-- Google Login -->
-                <a href="google" class="btn btn-outline-golden w-100">
-                    <img src="assets/images/google.png" alt="Google logo" class="me-2">
-                    Continue with Google
-                </a>
-
-                <div class="divider">
-                    <span class="px-2 bg-white text-muted fw-bold">OR</span>
                 </div>
 
                 <!-- Login Form -->
@@ -88,8 +82,6 @@ echo html_head('Log in', null, true, ['assets/css/signup.css'], true);
         </div>
     </div>
 </section>
-
-
 
 <?php
 // Output HTML scripts

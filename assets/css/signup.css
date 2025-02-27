@@ -70,3 +70,14 @@
   display: flex;
   gap: 1rem;
 }
+
+.container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.form-container {
+  max-width: 400px;
+  width: 100%;
+}
