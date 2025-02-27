@@ -1,10 +1,11 @@
 [
   {
-    "version": "MMXXV-II-XX",
+    "version": "MMXXV-II-XXVII",
     "date": "2025-02-20",
     "changes": [
-      "🚀 Added real-time search functionality",
-      "🔄 Implemented sorting by version",
+      "🚀 Added search functionality",
+      "📃 Added about and cancellation pages",
+      "📊 Added real stats for visa processing data",
       "🎨 UI improvements and animations"
     ]
   }

@@ -156,7 +156,7 @@ $pages = $database->select('pages', '*', [
             </div>
             <div class="row mt-2">
                 <div class="col-12">
-                    <p class="text-center text-muted small">Version MMXXV-II-XX: <a class="text-decoration-none text-golden" href=" changelog">Changelog</a> &bullet; Powered by <a target="_blank" class="text-decoration-none text-golden" href="https://inncelerator.com">Inncelerator</a></p>
+                    <p class="text-center text-muted small">Version MMXXV-II-XXVII: <a class="text-decoration-none text-golden" href=" changelog">Changelog</a> &bullet; Powered by <a target="_blank" class="text-decoration-none text-golden" href="https://inncelerator.com">Inncelerator</a></p>
                 </div>
             </div>
         </div>
