@@ -353,9 +353,75 @@ if (isset($_SESSION['user_id'])) {
     </div>
 </section>
 
+<!-- Stats Section -->
+<section class="stats-section position-relative my-5 py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1>Get Your Visa Approved with Confidence</h1>
+            </div>
+        </div>
+    </div>
+    <div class="stats-overlay"></div>
+    <div class="container">
+        <div class="row justify-content-center align-items-center text-center">
+
+            <!-- Google Rating -->
+            <div class="col-sm-6 col-md-3 rating-container">
+                <div class="rating-value">4.7</div>
+                <div class="stars">
+                    <svg class="star-icon" viewBox="0 0 24 24">
+                        <path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z" />
+                    </svg>
+                    <svg class="star-icon" viewBox="0 0 24 24">
+                        <path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z" />
+                    </svg>
+                    <svg class="star-icon" viewBox="0 0 24 24">
+                        <path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z" />
+                    </svg>
+                    <svg class="star-icon" viewBox="0 0 24 24">
+                        <path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z" />
+                    </svg>
+                    <svg class="star-icon half-star" viewBox="0 0 24 24">
+                        <path d="M12 2l2.4 7.4h7.6l-6 4.6 2.3 7-6.3-4.6-6.3 4.6 2.3-7-6-4.6h7.6z" />
+                    </svg>
+                </div>
+                <div class="rating-text">Google Rating</div>
+            </div>
+
+            <!-- Visa Approval Rate -->
+            <div class="col-sm-6 col-md-3 rating-container">
+                <div class="svg-container">
+                    <svg class="progress-circle" viewBox="0 0 100 100">
+                        <circle cx="50" cy="50" r="45" fill="none" stroke="#e0e0e0" stroke-width="10" />
+                        <path d="M 50,50 m -45,0 a 45,45 0 1,1 90,0 a 45,45 0 1,1 -90,0"
+                            fill="none" stroke="#009a5d" stroke-width="10" stroke-dasharray="282.6" stroke-dashoffset="2.8" />
+                        <text x="50" y="55" text-anchor="middle" font-size="18" font-weight="bold">99.5%</text>
+                    </svg>
+                </div>
+                <div class="rating-text">Visa Approval Rate</div>
+            </div>
+
+            <!-- Visas Processed (Meter Style) -->
+            <div class="col-sm-6 col-md-3 rating-container">
+                <div class="flip-counter">
+                    <div class="digit">1</div>
+                    <div class="digit">0</div>
+                    <div class="digit">0</div>
+                    <div class="digit">0</div>
+                    <div class="digit">0</div>
+                    <div class="digit plus">+</div>
+                </div>
+                <div class="rating-text mt-2">Visas Processed</div>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
 <!-- Reviews -->
 <?php require 'components/Reviews.php'; ?>
-
 <!-- Listening modal -->
 <div class="modal fade" id="listeningModal" tabindex="-1" aria-labelledby="listeningModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-sm">
@@ -457,6 +523,18 @@ echo html_scripts(
                     behavior: "smooth"
                 });
             }
+        });
+    });
+</script>
+
+<script>
+    // Optional: Add a flip animation effect dynamically (if needed)
+    document.addEventListener("DOMContentLoaded", function() {
+        let digits = document.querySelectorAll(".digit");
+        digits.forEach((digit, index) => {
+            setTimeout(() => {
+                digit.classList.add("flip");
+            }, index * 200);
         });
     });
 </script>

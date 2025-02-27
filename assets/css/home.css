@@ -635,3 +635,102 @@ html {
   justify-content: center;
   margin-bottom: 1.5rem;
 }
+
+/* stats */
+/* General Section Styling */
+.stats-section {
+  background: #f7f7f7;
+  clip-path: polygon(0 0, 100% 5%, 100% 100%, 0 95%);
+  position: relative;
+  padding: 60px 0;
+}
+
+/* Overlay for Slant Effect */
+.stats-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+/* Rating Container */
+.rating-container {
+  padding: 20px;
+}
+
+/* Google Rating */
+.rating-value {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: green;
+}
+
+.stars {
+  display: flex;
+  justify-content: center;
+  margin-top: 5px;
+}
+
+.star-icon {
+  width: 24px;
+  height: 24px;
+  fill: #ff9800;
+  margin: 0 2px;
+}
+
+.half-star {
+  fill-opacity: 0.5;
+}
+
+/* Progress Circle */
+.svg-container {
+  display: flex;
+  justify-content: center;
+}
+
+.progress-circle {
+  width: 80px;
+  height: 80px;
+}
+
+/* Flip Counter (Odometer Style) */
+.flip-counter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.digit {
+  width: 45px;
+  height: 70px;
+  background: linear-gradient(to bottom, #333, #111);
+  color: #fff;
+  font-size: 2.5rem;
+  font-weight: bold;
+  font-family: "Courier New", Courier, monospace;
+  text-align: center;
+  line-height: 70px;
+  margin: 0 2px;
+  border-radius: 5px;
+  position: relative;
+  box-shadow: inset 0 -3px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Middle Split Line Effect */
+.digit::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Plus Sign Styling */
+.plus {
+  background: #900;
+  color: #fff;
+}
