@@ -354,8 +354,14 @@ if (isset($_SESSION['user_id'])) {
         <div class="row">
             <div class="col-12">
                 <?php if ($orders['is_finished'] == 1 && $orders['is_processing'] == 1): ?>
-                    <div class="alert alert-info mt-3 mb-0">
-                        <i class="bi bi-info-circle"></i> You have recently applied for <?= $country_name; ?> visa. <a href="visa-status" class="text-golden">Check your visa status</a>.
+                    <div class="alert alert-warning mt-3 mb-0 d-flex justify-content-between align-items-center">
+                        <span>
+                            <i class="bi bi-info-circle"></i> You have already applied for <?= $country_name; ?> visa.
+                        </span>
+                        <a href="visa-status?order_id=<?= $orders['order_id']; ?>"
+                            class="btn btn-blue rounded-pill px-4 py-2 d-flex align-items-center">
+                            Check Visa Status
+                        </a>
                     </div>
                 <?php endif; ?>
                 <?php if ($orders['is_finished'] == 0): ?>

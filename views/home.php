@@ -241,7 +241,7 @@ if (isset($_SESSION['user_id'])) {
                         <p class="step-description">Double checked by our specialists and in-house AI</p>
                         <ul class="feature-list">
                             <li>Human and in-house AI expertise</li>
-                            <li>99.8% approval rate</li>
+                            <li>99.5% approval rate</li>
                             <li>Error-free applications</li>
                         </ul>
                     </div>
