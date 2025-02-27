@@ -13,7 +13,6 @@ $passports = $database->select('passports', '*', [
 $photos_check = $database->get('photos', 'is_finished', [
     'order_id' => $order_id
 ]);
-echo $photos_check;
 
 if ($photos_check === 0 || $photos_check === null || $photos_check === '') {
     header('Location: photo');

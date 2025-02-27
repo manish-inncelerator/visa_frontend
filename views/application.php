@@ -1700,7 +1700,6 @@ if ($currentStep === 'photo') {
 
 
 <?php if ($currentStep === 'other documents') { ?>
-
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             document.querySelectorAll(".doc_uploader").forEach((doc_uploader) => {
@@ -1709,153 +1708,135 @@ if ($currentStep === 'photo') {
                 const fileListContainer = document.getElementById(`file-list-${doc_uploader.dataset.traveler_id}-${doc_uploader.dataset.doc}`);
                 const uploadedDocuments = document.getElementById("uploadedDocuments");
 
-                const doc_uploaderMeta = {
+                const docMeta = {
                     traveler_id: doc_uploader.dataset.traveler_id || "",
                     document_id: doc_uploader.dataset.doc || "",
                     person_name: doc_uploader.dataset.person_name || "",
-                    order_id: "<?= $order_id; ?>", // Ensure PHP correctly outputs the value
+                    order_id: "<?= $order_id; ?>",
                     hu: "<?= $hu; ?>"
                 };
 
-                // Click event to trigger file selection
                 uploadClick.addEventListener("click", () => fileInput.click());
 
-                // Drag & Drop Events
-                doc_uploader.addEventListener("dragover", (e) => {
-                    e.preventDefault();
-                    doc_uploader.classList.add("dragover");
+                ["dragover", "dragleave", "drop"].forEach(event => {
+                    doc_uploader.addEventListener(event, (e) => handleDragEvents(e, doc_uploader));
                 });
 
-                doc_uploader.addEventListener("dragleave", () => {
-                    doc_uploader.classList.remove("dragover");
-                });
-
-                doc_uploader.addEventListener("drop", (e) => {
-                    e.preventDefault();
-                    doc_uploader.classList.remove("dragover");
-
-                    const files = e.dataTransfer.files;
-                    handleFileUpload(files, doc_uploader, fileListContainer, uploadedDocuments, doc_uploaderMeta);
-                });
-
-                // File selection event
                 fileInput.addEventListener("change", (event) => {
-                    handleFileUpload(event.target.files, doc_uploader, fileListContainer, uploadedDocuments, doc_uploaderMeta);
+                    handleFileUpload(event.target.files, doc_uploader, fileListContainer, uploadedDocuments, docMeta);
                 });
             });
 
-            async function handleFileUpload(files, doc_uploader, fileListContainer, uploadedDocuments, doc_uploaderMeta) {
-                if (!files.length) return;
+            document.querySelector('#saveNextBtnDocs')?.addEventListener('click', (event) => {
+                if (!document.querySelectorAll('.uploadedDiv').length) {
+                    event.preventDefault();
+                    Notiflix.Notify.info("Please upload at least one required document of the traveller.");
+                }
+            });
+        });
 
-                // Show upload overlay
-                function showUploadOverlay() {
-                    document.getElementById('uploadOverlay').style.display = 'flex';
+        async function handleFileUpload(files, doc_uploader, fileListContainer, uploadedDocuments, docMeta) {
+            if (!files.length) return;
+            showUploadOverlay();
+
+            for (const file of files) {
+                if (!file.type.match(/(pdf|image)/)) {
+                    Notiflix.Notify.warning("Only PDFs and images are allowed.");
+                    continue;
                 }
 
-                // Hide upload overlay
-                function hideUploadOverlay() {
-                    document.getElementById('uploadOverlay').style.display = 'none';
-                }
-
-                for (const file of files) {
-                    const formData = new FormData();
-                    formData.append("file", file);
-                    formData.append("traveler_id", doc_uploaderMeta.traveler_id);
-                    formData.append("document_id", doc_uploaderMeta.document_id);
-                    formData.append("person_name", doc_uploaderMeta.person_name);
-                    showUploadOverlay(); // Show the overlay
-                    try {
-                        const response = await fetch("api/v1/uploadDocument", {
-                            method: "POST",
-                            headers: {
-                                "X-Traveler-ID": doc_uploaderMeta.traveler_id,
-                                "X-Document-ID": doc_uploaderMeta.document_id,
-                                "X-Person-Name": doc_uploaderMeta.person_name,
-                                "X-Order-ID": doc_uploaderMeta.order_id,
-                                "HU": doc_uploaderMeta.hu
-                            },
-                            body: formData,
-                        });
-
-                        const result = await response.json();
-
-                        if (result.status === "success") {
-                            doc_uploader.style.display = "none"; // Hide doc_uploader on success
-                            // displayUploadedDocument(result.document_name, uploadedDocuments);
-                            location.reload();
-                        } else {
-                            // alert(result.message || "File upload failed.");
-                            Notiflix.Notify.failure(result.message || "File upload failed.");
-
-                        }
-                    } catch (error) {
-                        console.error("Error uploading file:", error);
-                        // alert("Error  file. Please try again.");
-                        Notiflix.Notify.failure('Error uploading file. Please try again.');
-
-                    } finally {
-                        hideUploadOverlay(); // Ensure overlay is hidden after the request completes
-                    }
-                }
-            }
-
-            window.handleDelete = async function(button, fileName, travelerId) {
-                if (!confirm("Are you sure you want to delete this file?")) return;
+                const formData = new FormData();
+                formData.append("file", file);
+                formData.append("traveler_id", docMeta.traveler_id);
+                formData.append("document_id", docMeta.document_id);
+                formData.append("person_name", docMeta.person_name);
 
                 try {
-                    const response = await fetch("api/v1/deleteDocument.php", {
+                    const response = await fetch("api/v1/uploadDocument", {
                         method: "POST",
                         headers: {
-                            "Content-Type": "application/json",
-                            "HU": "<?= $hu; ?>",
-                            "X-Order-Id": "<?= $order_id; ?>",
+                            "X-Traveler-ID": docMeta.traveler_id,
+                            "X-Document-ID": docMeta.document_id,
+                            "X-Person-Name": docMeta.person_name,
+                            "X-Order-ID": docMeta.order_id,
+                            "HU": docMeta.hu
                         },
-                        body: JSON.stringify({
-                            file_name: fileName,
-                            traveler_id: travelerId
-                        }),
+                        body: formData,
                     });
 
                     const result = await response.json();
-
                     if (result.status === "success") {
-                        // button.closest("div").remove(); // Remove the document container div
-                        Notiflix.Notify.success(result.message || "Uploaded file.");
-                        location.reload();
+                        displayUploadedFile(uploadedDocuments, docMeta.document_id, result.document_name, docMeta.traveler_id, file.type);
+                        Notiflix.Notify.success("File uploaded successfully!");
                     } else {
-                        // alert(result.message || "Failed to delete file.");
-                        Notiflix.Notify.failure(result.message || "Failed to delete file.");
+                        Notiflix.Notify.failure(result.message || "File upload failed.");
                     }
                 } catch (error) {
-                    // alert("Error deleting file. Please try again.");
-                    Notiflix.Notify.failure('Error deleting file. Please try again.');
+                    console.error("Error uploading file:", error);
+                    Notiflix.Notify.failure("Error uploading file. Please try again.");
                 }
-            };
+            }
+            hideUploadOverlay();
+        }
 
-        });
+        function handleDragEvents(event, element) {
+            event.preventDefault();
+            event.type === "dragover" ? element.classList.add("dragover") : element.classList.remove("dragover");
+        }
 
-        const saveNextBtnDocs = document.querySelector('#saveNextBtnDocs');
+        function displayUploadedFile(container, documentId, fileName, travelerId, fileType) {
+            const fileEntry = document.createElement("div");
+            fileEntry.classList.add("uploadedDiv");
+            fileEntry.innerHTML = `
+        <strong style="color: #8B6508;">${documentId.replace(/_/g, ' ')}</strong>
+        <span style="color: green;"> Uploaded ✅</span>
+        ${fileType.includes("pdf") ? '<span style="color: blue;"> (PDF) </span>' : ''}
+        <button class="delete-btn btn btn-danger" onclick="handleDelete(this, '${fileName}', '${travelerId}')">
+            🗑 Remove
+        </button>
+    `;
+            container.appendChild(fileEntry);
+        }
 
-        if (saveNextBtnDocs) {
-            saveNextBtnDocs.addEventListener('click', (event) => {
-                // Query the DOM for the current list of uploadedDivs
-                const uploadedDivs = document.querySelectorAll('.uploadedDiv');
+        async function handleDelete(button, fileName, travelerId) {
+            if (!confirm("Are you sure you want to delete this file?")) return;
 
-                // Debug: log the number of uploadedDivs found
-                console.log(`Found ${uploadedDivs.length} uploadedDiv(s).`);
+            try {
+                const response = await fetch("api/v1/deleteDocument.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "HU": "<?= $hu; ?>",
+                        "X-Order-Id": "<?= $order_id; ?>",
+                    },
+                    body: JSON.stringify({
+                        file_name: fileName,
+                        traveler_id: travelerId
+                    }),
+                });
 
-                // If no uploadedDivs are found, stop navigation and notify the user
-                if (uploadedDivs.length === 0) {
-                    console.log('No uploadedDivs found, navigation stopped.');
-                    event.preventDefault(); // Prevent default behavior
-                    Notiflix.Notify.info('Please upload at least one required document of the traveller.');
+                const result = await response.json();
+                if (result.status === "success") {
+                    button.closest(".uploadedDiv").remove();
+                    Notiflix.Notify.success(result.message || "File deleted successfully.");
                 } else {
-                    console.log('Photo previews found, navigation allowed.');
-                    // Navigation is allowed (default behavior will occur)
+                    Notiflix.Notify.failure(result.message || "Failed to delete file.");
                 }
-            });
+            } catch (error) {
+                console.error("Error deleting file:", error);
+                Notiflix.Notify.failure("Error deleting file. Please try again.");
+            }
+        }
+
+        function showUploadOverlay() {
+            document.getElementById('uploadOverlay').style.display = 'flex';
+        }
+
+        function hideUploadOverlay() {
+            document.getElementById('uploadOverlay').style.display = 'none';
         }
     </script>
+
 <?php } ?>
 
 <!-- DETAILS -->
@@ -1933,8 +1914,36 @@ if ($currentStep === 'photo') {
                     body: JSON.stringify(data)
                 })
                 .then(response => response.json())
-                .then(result => showAlert(form, result.message, result.success))
-                .catch(() => showAlert(form, 'An error occurred while submitting the form.', false));
+                .then(result => {
+                    if (result.status === 200) {
+                        if (result.message === "make_payment") {
+                            window.location.href = "application/<?= $order_id; ?>/checkout"; // Redirect to checkout page
+                            return;
+                        }
+
+                        let newTid = result.message.replace(/^tid=/, ''); // Remove "tid=" if present
+                        let currentUrl = window.location.href;
+                        let urlObj = new URL(currentUrl);
+
+                        // Manually update the 'tid' parameter without encoding
+                        urlObj.search = urlObj.search.replace(/tid=[^&]*/, `tid=${newTid}`);
+
+                        if (!urlObj.search.includes('tid=')) {
+                            urlObj.search += (urlObj.search ? '&' : '?') + `tid=${newTid}`;
+                        }
+
+                        window.location.href = urlObj.toString(); // Redirect without encoding
+                    } else {
+                        // showAlert(form, result.message || 'Unexpected response from server.', false);
+                        Notiflix.Notify.failure(result.message || 'Unexpected response from server.');
+                    }
+                })
+
+
+
+                // .catch(() => showAlert(form, 'An error occurred while submitting the form.', false));
+                .catch(() => Notiflix.Notify.failure('An error occurred while submitting the form.'));
+
         }
 
         // 💾 Save draft with step parameter

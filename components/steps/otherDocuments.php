@@ -2,11 +2,11 @@
 
 
 // check persona table if is_finished = 1 then show photo upload page else redirect to persona page
-$docs_check = $database->get('documents', 'is_finished', [
+$passport_check = $database->get('passports', 'is_finished', [
     'order_id' => $order_id
 ]);
 
-if ($docs_check === 0 || $docs_check === null || $docs_check === '') {
+if ($passport_check === 0 || $passport_check === null || $passport_check === '') {
     header('Location: passport');
     exit;
 }
@@ -24,23 +24,20 @@ $docIds = json_decode($database->get('countries', 'required_documents', ['id' =>
 // Fetch document names based on required document IDs
 $requiredDocs = $database->select('required_documents', ['id', 'required_document_name'], ['id' => $docIds]);
 
+
 ?>
 
 <?php
 function encryptData($data, $key)
 {
-    $data = $key . $data . $key; // Add key padding for extra obfuscation
-    return base64_encode(strrev(str_rot13($data))); // Reverse and ROT13 encoding
+    return base64_encode(strrev(str_rot13($data . $key))); // Reverse + ROT13 + Base64
 }
 $encryptionKey = "72c440042ded5e0d0e36b5080fc3d696";
 ?>
 
-<div id="uploadOverlay" class="d-none fixed-top w-100 h-100 d-flex justify-content-center align-items-center bg-dark bg-opacity-50 text-white fw-bold fs-4">
-    Uploading... Please wait...
-</div>
 
 <?php foreach ($travelers as $traveler): ?>
-    <div class="card">
+    <div class="card mb-3">
         <div class="card-header fw-bold text-muted d-flex justify-content-between align-items-center">
             <div>
                 <i class="bi bi-upload"></i> Upload Documents
@@ -61,7 +58,8 @@ $encryptionKey = "72c440042ded5e0d0e36b5080fc3d696";
                 // Fetch uploaded document
                 $uploadedDoc = $database->get('documents', ['document_filename'], [
                     'traveler_id' => $traveler['id'],
-                    'document_type' => strtolower($doc['required_document_name']), // Ensure correct document
+                    'order_id' => $order_id,
+                    'document_type' => strtolower(preg_replace('/[^\w\s]/', ' ', $doc['required_document_name'])),
                     'is_finished' => 1
                 ]);
                 ?>
@@ -87,7 +85,7 @@ $encryptionKey = "72c440042ded5e0d0e36b5080fc3d696";
                             data-person_name="<?= $traveler['name'] ?>"
                             data-doc="<?= $doc['id'] ?>">
                             <span class="upload-text upload-click">Drag & Drop files here or <span class="text-primary">Click to Upload</span></span>
-                            <input type="file" multiple class="file-input" style="display: none;">
+                            <input type="file" accept=".pdf,image/*" multiple class="file-input" style="display: none;">
                         </div>
 
                         <div class="file-list mt-2" id="file-list-<?= $traveler['id'] ?>-<?= $doc['id'] ?>"></div>

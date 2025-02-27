@@ -7,8 +7,7 @@ function encryptData($data, $key)
 
 function decryptData($encryptedData, $key)
 {
-    $decoded = str_rot13(strrev(base64_decode($encryptedData))); // Reverse steps
-    return str_replace($key, '', $decoded); // Remove key padding
+    return str_replace($key, '', str_rot13(strrev(base64_decode($encryptedData)))); // Decode + Reverse + ROT13
 }
 
 // Encryptiuon key for enc and dec
@@ -33,17 +32,17 @@ $t_id = $database->get('travelers', '*', [
     'id' => $decryptedId
 ]);
 
-// Check if a traveler was found
-if (!$t_id) {
-    header('Location: 404');
-    exit;
-}
+// // Check if a traveler was found
+// if (!$t_id) {
+//     header('Location: 404');
+//     exit;
+// }
 
-// If decryptedId doesn't match the database ID, redirect to 404
-if ($decryptedId != $t_id['id']) {
-    header('Location: 404');
-    exit;
-}
+// // If decryptedId doesn't match the database ID, redirect to 404
+// if ($decryptedId != $t_id['id']) {
+//     header('Location: 404');
+//     exit;
+// }
 ?>
 <div class="card">
     <div class="card-header fw-bold text-muted d-flex justify-content-between align-items-center">

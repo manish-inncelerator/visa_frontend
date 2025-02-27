@@ -1,5 +1,6 @@
 <?php
 require('../../database.php');
+require 'functions/validate_hu.php';
 
 // Get JSON input
 $jsonData = file_get_contents('php://input');
@@ -19,28 +20,28 @@ if (!$order_id) {
 $data = sanitizeData($data);
 
 
-$uuid = $_SESSION['uuid'] ?? null;
+// $uuid = $_SESSION['uuid'] ?? null;
 
-// Fetch HU from headers
-$headers = getallheaders();
-$hu = $headers['HU'] ?? $headers['Hu'] ?? $headers['hu'] ?? null;
+// // Fetch HU from headers
+// $headers = getallheaders();
+// $hu = $headers['HU'] ?? $headers['Hu'] ?? $headers['hu'] ?? null;
 
 
 
-$scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
-$host = parse_url($scheme . '://' . ($_SERVER['HTTP_HOST'] ?? ''), PHP_URL_HOST);
+// $scheme = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') ? 'https' : 'http';
+// $host = parse_url($scheme . '://' . ($_SERVER['HTTP_HOST'] ?? ''), PHP_URL_HOST);
 
-if (defined('DEV_MODE') && DEV_MODE) {
-    echo json_encode(["debug" => ["uuid" => $uuid, "hu" => $hu, "host" => $host]]);
-}
+// if (defined('DEV_MODE') && DEV_MODE) {
+//     echo json_encode(["debug" => ["uuid" => $uuid, "hu" => $hu, "host" => $host]]);
+// }
 
-if (!isValidRequest($uuid, $hu, $host)) {
-    respondWithJson(["error" => "Invalid request", "debug" => getErrorDetails($uuid, $hu, $host)], 400);
-}
+// if (!isValidRequest($uuid, $hu, $host)) {
+//     respondWithJson(["error" => "Invalid request", "debug" => getErrorDetails($uuid, $hu, $host)], 400);
+// }
 
-if (!isHuValid($uuid, $hu)) {
-    respondWithJson(["error" => "Invalid HU"], 401);
-}
+// if (!isHuValid($uuid, $hu)) {
+//     respondWithJson(["error" => "Invalid HU"], 401);
+// }
 
 
 
@@ -55,56 +56,59 @@ try {
     handleAdditionalInformation($database, $data, $order_id);
     handleAntecedentInformation($database, $data, $order_id);
     handleDeclarations($database, $data, $order_id);
-
     // Fetch traveler data from DB
-    $users = $database->select("travelers", ["name", "is_full_details_available"], [
+    $users = $database->select("travelers", ["name", "id", "order_id"], [
         "order_id" => $order_id,
         "name" => $data['fullName'],
     ]);
 
     // Check if any user has incomplete details and process the first one
-    $foundIncomplete = false;
     foreach ($users as $user) {
-        if ($user['is_full_details_available'] === 0) {
+        if ($user['id'] == $data['traveler_id'] && $user['order_id'] == $order_id) {
             // Mark this user as having full details
-            $database->update("travelers", ["is_full_details_available" => 1], [
+            $database->update("details_checklist", ["is_finished" => 1], [
                 "order_id" => $order_id,
-                "name" => $data['fullName']
+                "traveler_id" => $data['traveler_id']
             ]);
 
             // Get the next traveler who has incomplete details
-            $nextUser = $database->get("travelers", ["name"], [
+            $nextUser = $database->get("details_checklist", ["traveler_id"], [
                 "order_id" => $order_id,
-                "is_full_details_available" => 0
+                "is_finished" => 0 // Ensure this column exists
             ]);
 
+
             if ($nextUser) {
-                // Redirect to the next traveler
-                http_response_code(302);
-                header('Location: details?order_id=' . $order_id . '&name=' . $nextUser['name']);
-                exit;
+                // Redirect to the next traveler's details page
+                // header('Location: ../../application/' . $order_id . '/details?tid=' . urlencode($nextTraveler['id']));
+                // exit;
+
+                function encryptData($data, $key)
+                {
+                    return base64_encode(strrev(str_rot13($data . $key))); // Reverse + ROT13 + Base64
+                }
+                $encryptionKey = "72c440042ded5e0d0e36b5080fc3d696";
+                $encryptedIdNew = encryptData($nextUser['traveler_id'], $encryptionKey);
+
+                http_response_code(200);
+                echo json_encode([
+                    'status' => 200,
+                    'message' => 'tid=' . $encryptedIdNew
+                ]);
             } else {
-                // No more incomplete travelers, redirect to the thank you page
-                http_response_code(302);
-                header('Location: thank-you');
+                // No incomplete travelers found, return a response
+                http_response_code(200);
+                echo json_encode(['status' => 200, 'message' => 'make_payment']);
                 exit;
             }
+        } else {
 
-            $foundIncomplete = true;
-            break; // Break the loop once an incomplete user is found and processed
+            // No incomplete travelers found, return a response
+            http_response_code(200);
+            echo json_encode(['status' => 200, 'message' => 'make_payment']);
+            exit;
         }
     }
-
-    if (!$foundIncomplete) {
-        // No incomplete travelers found, proceed to the thank-you page
-        http_response_code(302);
-        header('Location: thank-you');
-        exit;
-    }
-
-
-    // Return unified response
-    echo json_encode(['status' => 204, 'message' => 'make_payment']);
 } catch (Exception $e) {
     http_response_code(500);
     echo json_encode(['message' => 'An error occurred', 'error' => $e->getMessage()]);
@@ -304,6 +308,7 @@ function handleDeclarations($database, $data, $order_id)
         'information_verification' => $information_verification,
         'applicant_responsibility' => $applicant_responsibility,
         'land_packages_interest' => $land_packages_interest,
+        'is_finished' => 1,
         'order_id' => $order_id,
         'created_at' => date('Y-m-d H:i:s')
     ];

@@ -4,7 +4,7 @@ if ($countryName != 'Singapore') {
         'order_id' => $order_id
     ]);
 } else {
-    $declarations = $database->get('declarations', 'is_finished', [
+    $declarations = $database->get('declaration_terms', 'is_finished', [
         'order_id' => $order_id
     ]);
 }

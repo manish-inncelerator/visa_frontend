@@ -267,6 +267,7 @@ function saveDeclarations($database, $data, $order_id)
         'deposit_withdrawal' => $deposit_withdrawal,
         'information_verification' => $information_verification,
         'applicant_responsibility' => $applicant_responsibility,
+        'is_finished' => 1,
         'land_packages_interest' => $land_packages_interest, // default to current timestamp if not provided
         'order_id' => $order_id
     ]);
