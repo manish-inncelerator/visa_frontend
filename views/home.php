@@ -358,7 +358,7 @@ if (isset($_SESSION['user_id'])) {
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <h1>Get Your Visa Approved with Confidence</h1>
+                <h2 class="fw-bold">Get Your Visa Approved with Confidence</h2>
             </div>
         </div>
     </div>

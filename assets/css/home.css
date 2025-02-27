@@ -639,7 +639,7 @@ html {
 /* stats */
 /* General Section Styling */
 .stats-section {
-  background: #f7f7f7;
+  background: #fcfcfc;
   clip-path: polygon(0 0, 100% 5%, 100% 100%, 0 95%);
   position: relative;
   padding: 60px 0;
